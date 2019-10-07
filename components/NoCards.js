@@ -10,7 +10,7 @@ class NoCards extends React.Component {
   render() {
     return (
       <View>
-        <Text>No more cards</Text>
+        <Text>Find something Else</Text>
       </View>
     )
   }

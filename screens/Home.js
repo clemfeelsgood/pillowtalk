@@ -9,20 +9,36 @@ import NoCards from '../components/NoCards.js';
 
 import { StyleSheet, Platform, Image, Text, View} from 'react-native';
 
+class Card extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
+  render() {
+    return (
+      <View style={[styles.card, {backgroundColor: this.props.backgroundColor}]}>
+        <Text>{this.props.text}</Text>
+      </View>
+    )
+  }
+}
 
 class Home extends React.Component {
-state = {
-    cards: [
-      {text: 'fran'},
-      {text: 'jackie'},
-      {text: 'phil'},
-      {text: 'jacks'},
-      {text: 'mellow'},
-      {text: 'frank'},
-      {text: 'timmmay'},
-    ]
-  };
+constructor(props) {
+    super(props);
+    this.state = {
+      cards: [
+        {text: 'Tomato', backgroundColor: 'red'},
+        {text: 'Aubergine', backgroundColor: 'purple'},
+        {text: 'Courgette', backgroundColor: 'green'},
+        {text: 'Blueberry', backgroundColor: 'blue'},
+        {text: 'Umm...', backgroundColor: 'cyan'},
+        {text: 'orange', backgroundColor: 'orange'},
+      ],
+
+    };
+  }
+
   componentWillMount(){
     this.props.dispatch(getCards())
   }
@@ -30,14 +46,18 @@ state = {
   handleYup (card) {
     console.log(`Yup for ${card.text}`)
   }
+
   handleNope (card) {
     console.log(`Nope for ${card.text}`)
+  }
+   handleMaybe (card) {
+    console.log(`Maybe for ${card.text}`)
   }
 
   render() {
     return (
       <SwipeCards
-        cards={this.props.cards}
+        cards={this.state.cards}
         stack={false}
         renderCard={(cardData) => <Card {...cardData} />}
         renderNoMoreCards={() => <NoCards />}

@@ -19,7 +19,7 @@ export function login(user){
 
 export function getCards(){
 	return function(dispatch){
-		firebase.database().ref('card').once('value', (snap) => {
+		firebase.database().ref('cards').once('value', (snap) => {
 		  var items = [];
 		  snap.forEach((child) => {
 		    item = child.val();

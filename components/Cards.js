@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 
 class Cards extends React.Component {
-  state = {
-    num: 0
-  }
+  //state = {
+    //num: 0
+  //}
 
 
   render() {
