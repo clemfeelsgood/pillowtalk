@@ -1,0 +1,32 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'ios' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for ios
+
+  pod 'RNFirebase', :path => '../node_modules/react-native-firebase/ios'
+  pod 'React', :path => '../node_modules/react-native'
+  pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
+  pod 'Firebase'
+
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
+  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+
+  pod 'RNScreens', :path => '../node_modules/react-native-screens'
+
+  pod 'react-native-spinkit', :path => '../node_modules/react-native-spinkit'
+
+  target 'iosTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'iosUITests' do
+    # Pods for testing
+  end
+
+end
