@@ -1,23 +1,64 @@
 import React from 'react';
 import styles from '../styles'
+import { connect } from 'react-redux';
+import * as firebase from 'firebase';
 
 import { 
-  Text, 
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Image,
   View
 } from 'react-native';
 
 class Matches extends React.Component {
-  state = {}
+  constructor(props) {
+    super(props);
+    this.state = {
+      chats: [
+        {text: 'Tomato', backgroundColor: 'red'},
+        {text: 'Aubergine', backgroundColor: 'purple'},
+        {text: 'Courgette', backgroundColor: 'green'},
+        {text: 'Blueberry', backgroundColor: 'blue'},
+        {text: 'Umm...', backgroundColor: 'cyan'},
+        {text: 'orange', backgroundColor: 'orange'},
+      ],
 
-  componentWillMount() {}
+    };
+  }
+
+  componentWillMount() {
+    firebase.database().ref('cards/' + this.props.user.id + '/chats').on('value', (snap) => {
+      var items = [];
+      snap.forEach((child) => {
+        item = child.val();
+        items.push(item); 
+      });
+      this.setState({ chats: items.reverse() });
+    });
+  }
 
   render() {
     return (
-     <View>
-      <Text>Matches</Text>
+     <View style={styles.container} >
+      <ScrollView>
+        {this.state.chats.map((uri)=>{
+          return (
+            <TouchableOpacity>
+              <Text style={[styles.bold, styles.center]}>{uri.text}</Text>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
      </View>
     )
   }
 }
 
-export default Matches;
+function mapStateToProps(state) {
+  return {
+    user: state.user
+  };
+}
+
+export default connect(mapStateToProps)(Matches);
