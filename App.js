@@ -4,6 +4,8 @@ import TabNavigator from './navigation/TabNavigator.js';
 import Onboarding from './navigation/Onboarding.js';
 import { Text, View } from 'react-native';
 import Login from './screens/Login.js'
+import * as firebase from 'firebase';
+import Home from './screens/Home.js'
 
 import reducers from './redux/reducers';
 import thunkMiddleware from 'redux-thunk';
@@ -17,7 +19,7 @@ export default class App extends React.Component {
 
   render() {
     return (
-          <Login/>
+          <Home/>
     );
   }
 }

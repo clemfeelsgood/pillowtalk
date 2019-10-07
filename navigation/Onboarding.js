@@ -1,13 +1,14 @@
 import React from 'react'
 import { StyleSheet, Platform, Image, Text, View } from 'react-native'
-import { SwitchNavigator } from 'react-navigation'
+import { createSwitchNavigator } from 'react-navigation'
+import * as firebase from 'firebase';
 
 import Loading from '../screens/Loading'
 import SignUp from '../screens/SignUp'
 import Login from '../screens/Login'
-import Main from '../screens/Home'
+import Home from '../screens/Home'
 
-const App = SwitchNavigator(
+const Onboarding = createSwitchNavigator(
   {
     Loading,
     SignUp,

@@ -7,12 +7,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 const TabNavigator = createBottomTabNavigator({
     Profile: Profile,
-    Home: {
-      screen: Home,
-      navigationOptions: {
-        tabBarLabel: 'Home',
-      }
-    } ,
+    Home: Home,
     Matches: Matches,
     });
 

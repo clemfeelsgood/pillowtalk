@@ -1,13 +1,18 @@
 import React from 'react'
-import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
-import firebase from 'react-native-firebase';
+import { StyleSheet, Text, TextInput, View, Navigator, Button } from 'react-native'
+import * as firebase from 'firebase';
 import Home from './Home'
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import Signup from './SignUp'
+import firebaseConfig from '../config/firebase.js'
+firebase.initializeApp(firebaseConfig);
 
 
 export default class Login extends React.Component {
   state = { email: '', password: '', errorMessage: null }
   handleLogin = () => {
- const { email, pasword } = this.state
+ const { email, password } = this.state
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
@@ -40,6 +45,7 @@ export default class Login extends React.Component {
           value={this.state.password}
         />
         <Button title="Login" onPress={this.handleLogin} />
+        
         <Button
           title="Don't have an account? Sign Up"
           onPress={() => this.props.navigation.navigate('SignUp')}
