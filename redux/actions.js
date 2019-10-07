@@ -1,10 +1,21 @@
 import * as firebase from 'firebase';
 
-export function login(input){
+export function login(user){
   return function(dispatch){
-    dispatch({ type: 'LOGIN', payload: input });
-  }
+    
+  
+
+  firebase.database().ref('cards/').child(user.uid).once('value', function(snapshot){
+		  if(snapshot.val() !== null){
+		    dispatch({ type: 'LOGIN', user: snapshot.val(), loggedIn: true });
+		  } else {
+		    firebase.database().ref('cards/' + user.uid ).update(params);
+		    dispatch({ type: 'LOGIN', user: params, loggedIn: true });
+		  }
+		})
 }
+}
+
 
 export function getCards(){
 	return function(dispatch){

@@ -2,8 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, TextInput, View, Navigator, Button } from 'react-native'
 import * as firebase from 'firebase';
 import Home from './Home'
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import TabNavigator from '../navigation/TabNavigator';
 import Signup from './SignUp'
 import firebaseConfig from '../config/firebase.js'
 firebase.initializeApp(firebaseConfig);
@@ -54,6 +53,7 @@ export default class Login extends React.Component {
     )
   }
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -1,22 +1,41 @@
 import React from 'react'
 import { StyleSheet, Platform, Image, Text, View } from 'react-native'
-import { createSwitchNavigator } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
+import { createSwitchNavigator , createAppContainer} from 'react-navigation'
 import * as firebase from 'firebase';
+
+import TabNavigator from './TabNavigator.js';
 
 import Loading from '../screens/Loading'
 import SignUp from '../screens/SignUp'
 import Login from '../screens/Login'
 import Home from '../screens/Home'
 
-const Onboarding = createSwitchNavigator(
+const AppStack = createStackNavigator(
   {
-    Loading,
-    SignUp,
-    Login,
-    Home
+    Main: {
+      screen: TabNavigator,
+    },
+  }
+);
+
+const AuthStack = createStackNavigator(
+  {
+    Loading : Loading,
+    SignUp : SignUp,
+    Login : Login,
+    Home: Home
   },
   {
-    initialRouteName: 'Loading'
+    initialRouteName: 'Login'
   }
 )
-export default Onboarding
+export default createAppContainer(createSwitchNavigator(
+  {
+    Auth: AuthStack,
+    App: AppStack,
+  },
+  {
+    initialRouteName: 'Auth',
+  }
+));
