@@ -27,17 +27,8 @@ var db = firebase.firestore();
 .catch(function(error) {
     console.error("Error writing document: ", error);
 });
-
-
-//var db = firebase.firestore();
-  //const roomRef = db.collection("room").add({
-    //user1: this.state.user1,
-  //});  
-  //this.setState({
-    //user1: "",
-  //});  
-//})
 }
+
 
 joinRoom = () => {
 var db = firebase.firestore();
@@ -49,7 +40,7 @@ query.get()
     // doc.data() is never undefined for query doc snapshots
             
             db.collection("room").doc(doc.id).update({
-              user2: "clem",
+              user2: this.props.user.id,
             }); 
 
             console.log(doc.id, " => ", doc.data());  

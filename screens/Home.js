@@ -28,7 +28,7 @@ constructor(props) {
     super(props);
     this.state = {
       cards: [
-        {text: 'Tomato', backgroundColor: 'red'},
+        {text: 'test', backgroundColor: 'red'},
         {text: 'Aubergine', backgroundColor: 'purple'},
         {text: 'Courgette', backgroundColor: 'green'},
         {text: 'Blueberry', backgroundColor: 'blue'},

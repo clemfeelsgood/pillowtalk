@@ -17,25 +17,24 @@ class Matches extends React.Component {
     this.state = {
       cards: [
         {text: 'Tomato', backgroundColor: 'red'},
-        {text: 'Aubergine', backgroundColor: 'purple'},
-        {text: 'Courgette', backgroundColor: 'green'},
-        {text: 'Blueberry', backgroundColor: 'blue'},
-        {text: 'Umm...', backgroundColor: 'cyan'},
-        {text: 'orange', backgroundColor: 'orange'},
       ],
 
     };
   }
 
   componentWillMount() {
-    firebase.database().ref('cards/' + this.props.user.id + '/chats').on('value', (snap) => {
-      var items = [];
-      snap.forEach((child) => {
-        item = child.val();
-        items.push(item); 
-      });
-      this.setState({ cards: items.reverse() });
-    });
+     var db = firebase.firestore();
+     var cards = db.collection("cards");
+
+
+    //firebase.database().ref('cards/' + this.props.user.id + '/chats').on('value', (snap) => {
+      //var items = [];
+      //snap.forEach((child) => {
+        //item = child.val();
+        //items.push(item); 
+      //});
+      //this.setState({ cards: items.reverse() });
+    //});
   }
 
   render() {
