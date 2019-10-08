@@ -15,7 +15,7 @@ class Matches extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      chats: [
+      cards: [
         {text: 'Tomato', backgroundColor: 'red'},
         {text: 'Aubergine', backgroundColor: 'purple'},
         {text: 'Courgette', backgroundColor: 'green'},
@@ -34,7 +34,7 @@ class Matches extends React.Component {
         item = child.val();
         items.push(item); 
       });
-      this.setState({ chats: items.reverse() });
+      this.setState({ cards: items.reverse() });
     });
   }
 
@@ -42,7 +42,7 @@ class Matches extends React.Component {
     return (
      <View style={styles.container} >
       <ScrollView>
-        {this.state.chats.map((uri)=>{
+        {this.state.cards.map((uri)=>{
           return (
             <TouchableOpacity>
               <Text style={[styles.bold, styles.center]}>{uri.text}</Text>

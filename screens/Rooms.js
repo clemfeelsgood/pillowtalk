@@ -11,13 +11,14 @@ import {
 } from 'react-native';
 
 export default class Rooms extends React.Component {
-  state = { user1:'', user1cards: '', user2:'', user2cards:'', errorMessage: null }
+  state = { roomname: '',user1:'', user1card: '', user2:'', user2cards:'', errorMessage: null }
 
 createRoom = () => {
 var db = firebase.firestore();
 
  db.collection("room").add({
-    user1: this.state.user1,
+    roomname: this.state.newroom,
+    user1: this.state.newroom,
     
 })
 
@@ -39,14 +40,27 @@ var db = firebase.firestore();
 }
 
 joinRoom = () => {
-    
 var db = firebase.firestore();
-  const userRef = db.collection("room").doc("LKWRjuwsfsESLkrmSrrk").update({
-    user2: this.state.user2,
-  });  
-  this.setState({
-    user2: "",
-  });  
+var query = db.collection("room").where("roomname", "==", this.state.roomquery)
+
+query.get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+    // doc.data() is never undefined for query doc snapshots
+            
+            db.collection("room").doc(doc.id).update({
+              user2: "clem",
+            }); 
+
+            console.log(doc.id, " => ", doc.data());  
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    })
+
+.then(() => this.props.navigation.navigate('App'))
+
 }
 
 render() {
@@ -58,17 +72,17 @@ render() {
           placeholder="Choose your room name"
           autoCapitalize="none"
           style={styles.textInput}
-          onChangeText={user1 => this.setState({ user1 })}
-          value={this.state.user1}
+          onChangeText={newroom => this.setState({ newroom })}
+          value={this.state.newroom}
         />
         <Button title="Create Room" onPress={this.createRoom} />
 
         <TextInput
-          placeholder="Other User Name"
+          placeholder="What's the room name?"
           autoCapitalize="none"
           style={styles.textInput}
-          onChangeText={user2 => this.setState({ user2 })}
-          value={this.state.user2}
+          onChangeText={roomquery => this.setState({ roomquery })}
+          value={this.state.roomquery}
         />
         
         <Button title="Join Room" onPress={this.joinRoom} />
