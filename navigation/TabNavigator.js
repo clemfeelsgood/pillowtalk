@@ -8,9 +8,9 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 const TabNavigator = createBottomTabNavigator({
     Rooms: {
-      screen: Rooms,
+      screen: Profile,
       navigationOptions: {
-        tabBarLabel: 'Rooms',
+        tabBarLabel: 'Profile',
       },
     },
     Home: {

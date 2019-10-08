@@ -9,6 +9,7 @@ import TabNavigator from './TabNavigator.js';
 import Loading from '../screens/Loading'
 import SignUp from '../screens/SignUp'
 import Login from '../screens/Login'
+import Rooms from '../screens/Rooms'
 import Home from '../screens/Home'
 
 const AppStack = createStackNavigator(
@@ -24,6 +25,7 @@ const AuthStack = createStackNavigator(
     Loading : Loading,
     SignUp : SignUp,
     Login : Login,
+    Rooms: Rooms,
     Home: Home
   },
   {

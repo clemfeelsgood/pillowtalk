@@ -1,24 +1,48 @@
 import React from 'react'
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
 import * as firebase from 'firebase';
+import Rooms from './Rooms';
+import firebaseConfig from '../config/firebase.js';
+import 'firebase/firestore';
+
 export default class SignUp extends React.Component {
-  state = { email: '', password: '', errorMessage: null }
+  state = { name:'', email: '', password: '', errorMessage: null }
+
 handleSignUp = () => {
     firebase
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then(() => this.props.navigation.navigate('Main'))
+      .then(() => this.props.navigation.navigate('Rooms'))
       .catch(error => this.setState({ errorMessage: error.message }))
-  }
+
+
+var db = firebase.firestore();
+  const userRef = db.collection("users").add({
+    name: this.state.name,
+    email: this.state.email
+  });  
+  this.setState({
+    name: "",
+    email: ""
+  });  
+}
+
+  
+
   
 render() {
     return (
       <View style={styles.container}>
         <Text>Sign Up</Text>
-        {this.state.errorMessage &&
-          <Text style={{ color: 'red' }}>
-            {this.state.errorMessage}
-          </Text>}
+        {this.state.errorMessage && <Text style={{ color: 'red' }}> {this.state.errorMessage} </Text>}
+        
+        <TextInput
+          placeholder="Name"
+          autoCapitalize="none"
+          style={styles.textInput}
+          onChangeText={name => this.setState({ name })}
+          value={this.state.name}
+        />
         <TextInput
           placeholder="Email"
           autoCapitalize="none"
@@ -41,8 +65,10 @@ render() {
         />
       </View>
     )
-  }
+  };
 }
+  
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

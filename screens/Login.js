@@ -1,8 +1,8 @@
 import React from 'react'
 import { StyleSheet, Text, TextInput, View, Navigator, Button } from 'react-native'
 import * as firebase from 'firebase';
-import Home from './Home'
-import TabNavigator from '../navigation/TabNavigator';
+import Rooms from './Rooms'
+import TabNavigator from '../navigation/TabNavigator'
 import Signup from './SignUp'
 import firebaseConfig from '../config/firebase.js'
 firebase.initializeApp(firebaseConfig);
@@ -15,7 +15,7 @@ export default class Login extends React.Component {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(() => this.props.navigation.navigate('Home'))
+      .then(() => this.props.navigation.navigate('Rooms'))
       .catch(error => this.setState({ errorMessage: error.message }))
   }
 
