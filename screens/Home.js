@@ -4,93 +4,78 @@ import * as firebase from 'firebase';
 import { getCards } from '../redux/actions'
 import SwipeCards from 'react-native-swipe-cards'
 import { connect } from 'react-redux';
-import Cards from '../components/Cards.js';
+//import Cards from '../components/Cards.js';
 import NoCards from '../components/NoCards.js';
 
 import { StyleSheet, Platform, Image, Text, View} from 'react-native';
 
 
+class Description extends React.Component {
 
-class Card extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
+render() {
     return (
-      <View style={[styles.card, {backgroundColor: this.props.backgroundColor}]}>
-        <Text>{this.props.text}</Text>
-      </View>
-    )
-  }
-}
+              <Text>{this.props.text}</Text>
+            )  
+          }
+      }
 
+  
+ 
 class Home extends React.Component {
 constructor(props) {
-   //var db = firebase.firestore();
-   //var querycards = db.collection("cards")
-   //var items = [];
-
-  //querycards.get()
-    //.then(function(querySnapshot) {
-      //  querySnapshot.forEach(function(doc) {
-        //     item = doc.val();
-          //   item.id = doc.key; 
-            //items.push(item);
-            //console.log(doc.id, " => ", doc.data());  
-          //  }); 
-            
-        //})
-    //this.state = {
-      //cards: items,
-    //}
-  //};  
-
-
-
-   super(props);
-    this.state = {
-    cards: 
-      [
-        {text: 'test', backgroundColor: 'red'},
-        {text: 'Aubergine', backgroundColor: 'purple'},
-        {text: 'Courgette', backgroundColor: 'green'},
-        {text: 'Blueberry', backgroundColor: 'blue'},
-        {text: 'Umm...', backgroundColor: 'cyan'},
-        {text: 'orange', backgroundColor: 'orange'},
-      ],
-
-
-    };
+  super();
+  this.ref = firebase.firestore().collection('cards');
+  this.state = {
+    Cards: [],
+    user: "clem"
+  };
   }
 
-  //componentDidMount() {
-  //this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
-//}
+
+onCollectionUpdate = (querySnapshot) => {
+  const cards = [];
+  querySnapshot.forEach((doc) => {
+    const { text } = doc.data();
+    cards.push({
+      id: doc.id,
+      doc, // DocumentSnapshot
+      text
+    });
+  });
+  this.setState({
+    cards,
+    isLoading: false,
+ });
+}
+  componentDidMount() {
+  this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+}
 
   handleYup (card) {
-    console.log(`Yup for ${card.text}`)
+    state = { userid: "itgdthmol6ax4OZfPrD0" ,};
+    firebase.firestore().collection('users').doc(state.userid).update({
+    swipesyes: firebase.firestore.FieldValue.arrayUnion(card.id)
+});
   }
 
   handleNope (card) {
-    console.log(`Nope for ${card.text}`)
+    firebase.firestore().collection('users').doc(state.userid).update({
+    swipesno: firebase.firestore.FieldValue.arrayUnion(card.id)
+});
   }
-   handleMaybe (card) {
-    console.log(`Maybe for ${card.text}`)
-  }
+
 
   render() {
     return (
       <SwipeCards
         cards={this.state.cards}
         stack={false}
-        renderCard={(cardData) => <Card {...cardData} />}
+        renderCard={(cardData) => <Description {...cardData} />}
         renderNoMoreCards={() => <NoCards />}
         showYup={false}
         showNope={false}
         handleYup={this.handleYup}
         handleNope={this.handleNope}
-        handleMaybe={this.handleMaybe}
         hasMaybeAction={false}/>
     )
   }
