@@ -9,6 +9,8 @@ import NoCards from '../components/NoCards.js';
 
 import { StyleSheet, Platform, Image, Text, View} from 'react-native';
 
+
+
 class Card extends React.Component {
   constructor(props) {
     super(props);
@@ -25,9 +27,31 @@ class Card extends React.Component {
 
 class Home extends React.Component {
 constructor(props) {
-    super(props);
+   //var db = firebase.firestore();
+   //var querycards = db.collection("cards")
+   //var items = [];
+
+  //querycards.get()
+    //.then(function(querySnapshot) {
+      //  querySnapshot.forEach(function(doc) {
+        //     item = doc.val();
+          //   item.id = doc.key; 
+            //items.push(item);
+            //console.log(doc.id, " => ", doc.data());  
+          //  }); 
+            
+        //})
+    //this.state = {
+      //cards: items,
+    //}
+  //};  
+
+
+
+   super(props);
     this.state = {
-      cards: [
+    cards: 
+      [
         {text: 'test', backgroundColor: 'red'},
         {text: 'Aubergine', backgroundColor: 'purple'},
         {text: 'Courgette', backgroundColor: 'green'},
@@ -36,12 +60,13 @@ constructor(props) {
         {text: 'orange', backgroundColor: 'orange'},
       ],
 
+
     };
   }
 
-  componentWillMount(){
-    this.props.dispatch(getCards())
-  }
+  //componentDidMount() {
+  //this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+//}
 
   handleYup (card) {
     console.log(`Yup for ${card.text}`)

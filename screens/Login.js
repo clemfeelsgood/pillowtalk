@@ -18,7 +18,6 @@ export default class Login extends React.Component {
       .then(() => this.props.navigation.navigate('Rooms'))
       .catch(error => this.setState({ errorMessage: error.message }))
   }
-
   
   render() {
     return (
@@ -43,7 +42,7 @@ export default class Login extends React.Component {
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
         />
-        <Button title="Login" onPress={this.handleLogin} />
+        <Button title="Login" onPress={this.handleLogin}/>
         
         <Button
           title="Don't have an account? Sign Up"
@@ -52,6 +51,8 @@ export default class Login extends React.Component {
       </View>
     )
   }
+
+
 }
 
 const styles = StyleSheet.create({

@@ -40,7 +40,7 @@ query.get()
     // doc.data() is never undefined for query doc snapshots
             
             db.collection("room").doc(doc.id).update({
-              user2: this.props.user.id,
+              user2: "clem",
             }); 
 
             console.log(doc.id, " => ", doc.data());  
@@ -51,7 +51,6 @@ query.get()
     })
 
 .then(() => this.props.navigation.navigate('App'))
-
 }
 
 render() {

@@ -24,9 +24,24 @@ class Matches extends React.Component {
 
   componentWillMount() {
      var db = firebase.firestore();
-     var cards = db.collection("cards");
+     var currentroom = "h9KcaOHi4h5hsTtoTccC"
+     var matches = db.collection("cards").where("roomname", "==", this.state.roomquery)
 
+     cardslist.get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+    // doc.data() is never undefined for query doc snapshots
+            
+            this.state = this.state 
 
+            console.log(doc.id, " => ", doc.data());  
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    })
+
+.then(() => this.props.navigation.navigate('App'))
     //firebase.database().ref('cards/' + this.props.user.id + '/chats').on('value', (snap) => {
       //var items = [];
       //snap.forEach((child) => {
