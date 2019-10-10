@@ -11,14 +11,14 @@ import {
 } from 'react-native';
 
 export default class Rooms extends React.Component {
-  state = { roomname: '',user1:'', user1card: '', user2:'', user2cards:'', errorMessage: null }
+  state = { roomname: '',user1:'', user2:'', errorMessage: null }
 
 createRoom = () => {
 var db = firebase.firestore();
 
  db.collection("room").add({
     roomname: this.state.newroom,
-    user1: this.state.newroom,
+    user1: "clem",
     
 })
 
@@ -40,7 +40,7 @@ query.get()
     // doc.data() is never undefined for query doc snapshots
             
             db.collection("room").doc(doc.id).update({
-              user2: "clem",
+              user2: "charlotte"
             }); 
 
             console.log(doc.id, " => ", doc.data());  

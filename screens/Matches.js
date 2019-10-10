@@ -12,54 +12,44 @@ import {
 } from 'react-native';
 
 class Matches extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      cards: [
-        {text: 'Tomato', backgroundColor: 'red'},
-      ],
+ constructor() {
+  super();
+  this.state = {
+    isLoading: true,
+    user: {},
+    key: '',
+    swipes: [],
+  };
+}
 
-    };
-  }
+  componentDidMount() {
+  const ref = firebase.firestore().collection('users').doc("itgdthmol6ax4OZfPrD0");
+  ref.get().then((doc) => {
+    const user = doc.data();
+    if (doc.exists) {
+      this.setState({
+        user: doc.data(),
+        key: doc.id,
+        isLoading: false,
+        swipes: user.swipesyes
+      });
+      console.log(doc.id, " => ", doc.data(), swipes);
+    } else {
+      console.log("No such document!");
+    }
+  });
 
-  componentWillMount() {
-     var db = firebase.firestore();
-     var currentroom = "h9KcaOHi4h5hsTtoTccC"
-     var matches = db.collection("cards").where("roomname", "==", this.state.roomquery)
+}
 
-     cardslist.get()
-    .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-    // doc.data() is never undefined for query doc snapshots
-            
-            this.state = this.state 
-
-            console.log(doc.id, " => ", doc.data());  
-        });
-    })
-    .catch(function(error) {
-        console.log("Error getting documents: ", error);
-    })
-
-.then(() => this.props.navigation.navigate('App'))
-    //firebase.database().ref('cards/' + this.props.user.id + '/chats').on('value', (snap) => {
-      //var items = [];
-      //snap.forEach((child) => {
-        //item = child.val();
-        //items.push(item); 
-      //});
-      //this.setState({ cards: items.reverse() });
-    //});
-  }
 
   render() {
     return (
      <View style={styles.container} >
       <ScrollView>
-        {this.state.cards.map((uri)=>{
+        {this.state.swipes.map((uri)=>{
           return (
-            <TouchableOpacity>
-              <Text style={[styles.bold, styles.center]}>{uri.text}</Text>
+            <TouchableOpacity style={styles.imgRow} >
+              <Text style={[styles.bold, styles.center]}>{uri}</Text>
             </TouchableOpacity>
           );
         })}

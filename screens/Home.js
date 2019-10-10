@@ -52,7 +52,7 @@ onCollectionUpdate = (querySnapshot) => {
 }
 
   handleYup (card) {
-    state = { userid: "itgdthmol6ax4OZfPrD0" ,};
+    state = { userid: "gApoGfSZYbTPKnz8qFbp" ,};
     firebase.firestore().collection('users').doc(state.userid).update({
     swipesyes: firebase.firestore.FieldValue.arrayUnion(card.id)
 });
