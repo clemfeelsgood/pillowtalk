@@ -19,7 +19,7 @@ var db = firebase.firestore();
  db.collection("room").add({
     roomname: this.state.newroom,
     user1: "clem",
-    
+    user2: "",
 })
 
 .then(() => this.props.navigation.navigate('App'))
@@ -43,7 +43,7 @@ query.get()
               user2: "charlotte"
             }); 
 
-            console.log(doc.id, " => ", doc.data());  
+            //console.log(doc.id, " => ", doc.data());  
         });
     })
     .catch(function(error) {

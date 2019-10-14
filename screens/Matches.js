@@ -11,6 +11,30 @@ import {
   View
 } from 'react-native';
 
+function intersect(a, b) {
+    var t;
+    if (b.length > a.length) t = b, b = a, a = t; // indexOf to loop over shorter
+    return a.filter(function (e) {
+        return b.indexOf(e) > -1;
+    });
+  }
+
+function retrieveswipesyes (userid) {
+  const refuser = firebase.firestore().collection('users').doc(userid);
+  var swipesyes = [];
+  refuser.get().then((doc) => {
+    const user = doc.data();
+    if (doc.exists) {
+      swipesyes= user.swipesyes;
+      return swipesyes;
+      console.log(" => ", swipesyes);   
+    } 
+  else {
+    console.log("No such document!");
+      }
+    });
+  }
+
 class Matches extends React.Component {
  constructor() {
   super();
@@ -19,29 +43,30 @@ class Matches extends React.Component {
     user: {},
     key: '',
     swipes: [],
+    swipes2: [],
   };
 }
 
   componentDidMount() {
-  const ref = firebase.firestore().collection('users').doc("itgdthmol6ax4OZfPrD0");
-  ref.get().then((doc) => {
-    const user = doc.data();
+  //"itgdthmol6ax4OZfPrD0"
+  const refuser2 = firebase.firestore().collection('users').doc("gApoGfSZYbTPKnz8qFbp");
+  refuser2.get().then((doc) => {
+    const user2 = doc.data();
     if (doc.exists) {
-      this.setState({
-        user: doc.data(),
-        key: doc.id,
-        isLoading: false,
-        swipes: user.swipesyes
+      swipes: user2.swipesyes,
+            this.setState({
+              user2: doc.data(),
+              swipes: user2.swipesyes,
       });
-      console.log(doc.id, " => ", doc.data(), swipes);
-    } else {
+            //console.log(doc.id, " => ", doc.data());
+     } 
+     else {
       console.log("No such document!");
-    }
-  });
-
-}
-
-
+      }
+  }); 
+  var swipes2 = retrieveswipesyes("itgdthmol6ax4OZfPrD0");
+     console.log(" => ", swipes2);    
+  }  
   render() {
     return (
      <View style={styles.container} >
