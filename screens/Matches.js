@@ -26,7 +26,7 @@ function retrieveswipesyes (userid) {
     const user = doc.data();
     if (doc.exists) {
       swipesyes= user.swipesyes;
-      return swipesyes;
+      this.swipesyes;
       console.log(" => ", swipesyes);   
     } 
   else {
@@ -86,7 +86,7 @@ class Matches extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    user: state.user
+    swipes: state.swipes
   };
 }
 

@@ -8,7 +8,7 @@ import firebaseConfig from '../config/firebase.js'
 firebase.initializeApp(firebaseConfig);
 
 
-export default class Login extends React.Component {
+class Login extends React.Component {
   state = { email: '', password: '', errorMessage: null }
   handleLogin = () => {
  const { email, password } = this.state
@@ -64,6 +64,14 @@ export default class Login extends React.Component {
 
 
 }
+
+function mapStateToProps(state) {
+  return {
+    loggedIn: state.loggedIn
+  };
+}
+
+export default connect(mapStateToProps)(Login);
 
 
 const styles = StyleSheet.create({

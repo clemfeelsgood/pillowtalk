@@ -72,7 +72,7 @@ onCollectionUpdate = (querySnapshot) => {
 
 function mapStateToProps(state) {
   return {
-    loggedIn: state.loggedIn,
+    user: state.user
     cards: state.cards
   };
 }

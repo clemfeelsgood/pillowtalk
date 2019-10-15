@@ -10,7 +10,7 @@ import {
   Prompt
 } from 'react-native';
 
-export default class Rooms extends React.Component {
+class Rooms extends React.Component {
   state = { roomname: '',user1:'', user2:'', errorMessage: null }
 
 createRoom = () => {
@@ -81,6 +81,15 @@ render() {
     )
   };
 }
+
+function mapStateToProps(state) {
+  return {
+    room: state.newroom,
+    room: state.roomquery
+  };
+}
+
+export default connect(mapStateToProps)(Room);
 
 const styles = StyleSheet.create({
   container: {
