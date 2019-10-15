@@ -1,5 +1,6 @@
 import React from 'react';
-import styles from '../styles'
+import styles from '../styles';
+import { connect } from 'react-redux';
 
 import { 
   Text, 
@@ -14,10 +15,18 @@ class Profile extends React.Component {
   render() {
     return (
      <View>
-      <Text>Profile</Text>
+      <Text>(this.props.user.name)</Text>
      </View>
     )
   }
 }
 
-export default Profile;
+
+
+function mapStateToProps(state) {
+  return {
+    user: state.user
+  };
+}
+
+export default connect(mapStateToProps)(Profile);

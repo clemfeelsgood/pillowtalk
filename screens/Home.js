@@ -6,20 +6,9 @@ import SwipeCards from 'react-native-swipe-cards'
 import { connect } from 'react-redux';
 //import Cards from '../components/Cards.js';
 import NoCards from '../components/NoCards.js';
+import Description from '../components/Description';
 
 import { StyleSheet, Platform, Image, Text, View} from 'react-native';
-
-
-class Description extends React.Component {
-
-render() {
-    return (
-              <Text>{this.props.text}</Text>
-            )  
-          }
-      }
-
-  
  
 class Home extends React.Component {
 constructor(props) {

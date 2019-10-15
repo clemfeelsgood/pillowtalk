@@ -1,11 +1,19 @@
 import * as firebase from 'firebase';
 
 export function login(user){
-  return function(dispatch){
-    
-  
+	return function(dispatch){
+		let params = {
+		  id: user.uid,
+		  name: user.displayName,
+		  swipesyes: [],
+		  swipesno: [],
+		  notification: false,
+		  show: false,
+		  report: false,
+		  token: ' ',
+		}
 
-  firebase.database().ref('cards/').child(user.uid).once('value', function(snapshot){
+		firebase.database().ref('cards/').child(user.uid).once('value', function(snapshot){
 		  if(snapshot.val() !== null){
 		    dispatch({ type: 'LOGIN', user: snapshot.val(), loggedIn: true });
 		  } else {
@@ -13,7 +21,14 @@ export function login(user){
 		    dispatch({ type: 'LOGIN', user: params, loggedIn: true });
 		  }
 		})
+  }
 }
+
+export function logout(){
+	return function(dispatch){
+    firebase.auth().signOut()
+    dispatch({ type: 'LOGOUT', loggedIn: false });
+   }
 }
 
 

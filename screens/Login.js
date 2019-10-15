@@ -18,9 +18,19 @@ export default class Login extends React.Component {
       .then(() => this.props.navigation.navigate('Rooms'))
       .catch(error => this.setState({ errorMessage: error.message }))
   }
+
+  componentWillMount() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user != null) {
+        this.props.dispatch(login(user))
+      }
+    });
+  }
   
   render() {
     return (
+
+
       <View style={styles.container}>
         <Text>Login</Text>
         {this.state.errorMessage &&
@@ -54,6 +64,7 @@ export default class Login extends React.Component {
 
 
 }
+
 
 const styles = StyleSheet.create({
   container: {
