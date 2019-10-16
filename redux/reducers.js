@@ -4,8 +4,6 @@ export default reducers = (state = {
     user: {
       id: '',
       name: '',
-      id: user.uid,
-      name: user.displayName,
       swipesyes: [],
       swipesno: [],
       notification: false,

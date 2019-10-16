@@ -1,78 +1,69 @@
-import React from 'react';
-import styles from '../styles';
-import * as firebase from 'firebase';
-import { getCards } from '../redux/actions'
-import SwipeCards from 'react-native-swipe-cards'
-import { connect } from 'react-redux';
-//import Cards from '../components/Cards.js';
-import NoCards from '../components/NoCards.js';
-import Description from '../components/Description';
+import React from "react";
+import styles from "../styles";
+import * as firebase from "firebase";
+import { getCards } from "../redux/actions";
+import SwipeCards from "react-native-swipe-cards";
+import { connect } from "react-redux";
+import Cards from "../components/Cards.js";
+import NoCards from "../components/NoCards.js";
 
-import { StyleSheet, Platform, Image, Text, View} from 'react-native';
- 
+import { StyleSheet, Platform, Image, Text, View } from "react-native";
+
 class Home extends React.Component {
-constructor(props) {
-  super();
-  this.ref = firebase.firestore().collection('cards');
-  this.state = {
-    Cards: [],
-    user: "clem"
-  };
+  constructor(props) {
+    super();
+    this.ref = firebase.firestore().collection("cards");
+    this.state = {
+      cards: [],
+      user: "clem"
+    };
   }
 
-
-onCollectionUpdate = (querySnapshot) => {
-  const cards = [];
-  querySnapshot.forEach((doc) => {
-    const { text } = doc.data();
-    cards.push({
-      id: doc.id,
-      doc, // DocumentSnapshot
-      text
-    });
-  });
-  this.setState({
-    cards,
-    isLoading: false,
- });
-}
-  componentDidMount() {
-  this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
-}
-
-  handleYup (card) {
-    state = { userid: "gApoGfSZYbTPKnz8qFbp" ,};
-    firebase.firestore().collection('users').doc(state.userid).update({
-    swipesyes: firebase.firestore.FieldValue.arrayUnion(card.id)
-});
+  componentWillMount() {
+    this.props.dispatch(getCards());
   }
 
-  handleNope (card) {
-    firebase.firestore().collection('users').doc(state.userid).update({
-    swipesno: firebase.firestore.FieldValue.arrayUnion(card.id)
-});
+  handleYup(card) {
+    state = { userid: "gApoGfSZYbTPKnz8qFbp" };
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(state.userid)
+      .update({
+        swipesyes: firebase.firestore.FieldValue.arrayUnion(card.id)
+      });
   }
 
+  handleNope(card) {
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(state.userid)
+      .update({
+        swipesno: firebase.firestore.FieldValue.arrayUnion(card.id)
+      });
+  }
 
   render() {
     return (
       <SwipeCards
-        cards={this.state.cards}
+        cards={this.props.cards}
         stack={false}
-        renderCard={(cardData) => <Description {...cardData} />}
+        renderCard={cardData => <Cards {...cardData} />}
         renderNoMoreCards={() => <NoCards />}
         showYup={false}
         showNope={false}
         handleYup={this.handleYup}
         handleNope={this.handleNope}
-        hasMaybeAction={false}/>
-    )
+        hasMaybeAction={false}
+      />
+    );
   }
 }
 
 function mapStateToProps(state) {
   return {
-    user: state.user
+    user: state.user,
     cards: state.cards
   };
 }

@@ -1,41 +1,39 @@
-import React from 'react'
-import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
-import * as firebase from 'firebase';
-import Rooms from './Rooms';
-import firebaseConfig from '../config/firebase.js';
-import 'firebase/firestore';
+import React from "react";
+import { StyleSheet, Text, TextInput, View, Button } from "react-native";
+import * as firebase from "firebase";
+import Rooms from "./Rooms";
+import firebaseConfig from "../config/firebase.js";
+import "firebase/firestore";
 
 export default class SignUp extends React.Component {
-  state = { name:'', email: '', password: '', errorMessage: null }
+  state = { name: "", email: "", password: "", errorMessage: null };
 
-handleSignUp = () => {
+  handleSignUp = () => {
     firebase
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then(() => this.props.navigation.navigate('Rooms'))
-      .catch(error => this.setState({ errorMessage: error.message }))
+      .then(() => this.props.navigation.navigate("Rooms"))
+      .catch(error => this.setState({ errorMessage: error.message }));
 
+    var db = firebase.firestore();
+    const userRef = db.collection("users").add({
+      name: this.state.name,
+      email: this.state.email
+    });
+    this.setState({
+      name: "",
+      email: ""
+    });
+  };
 
-var db = firebase.firestore();
-  const userRef = db.collection("users").add({
-    name: this.state.name,
-    email: this.state.email
-  });  
-  this.setState({
-    name: "",
-    email: ""
-  });  
-}
-
-  
-
-  
-render() {
+  render() {
     return (
       <View style={styles.container}>
         <Text>Sign Up</Text>
-        {this.state.errorMessage && <Text style={{ color: 'red' }}> {this.state.errorMessage} </Text>}
-        
+        {this.state.errorMessage && (
+          <Text style={{ color: "red" }}> {this.state.errorMessage} </Text>
+        )}
+
         <TextInput
           placeholder="Name"
           autoCapitalize="none"
@@ -61,25 +59,24 @@ render() {
         <Button title="Sign Up" onPress={this.handleSignUp} />
         <Button
           title="Already have an account? Login"
-          onPress={() => this.props.navigation.navigate('Login')}
+          onPress={() => this.props.navigation.navigate("Login")}
         />
       </View>
-    )
-  };
+    );
+  }
 }
-  
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center"
   },
   textInput: {
     height: 40,
-    width: '90%',
-    borderColor: 'gray',
+    width: "90%",
+    borderColor: "gray",
     borderWidth: 1,
     marginTop: 8
   }
-})
+});

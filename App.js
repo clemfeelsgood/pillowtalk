@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './styles.js'
-import TabNavigator from './navigation/TabNavigator.js';
 import Onboarding from './navigation/Onboarding.js';
 import { Text, View, YellowBox } from 'react-native';
 import Login from './screens/Login.js'

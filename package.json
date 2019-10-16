@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "array-intersection": "^0.1.2",
+    "eslint": "^6.5.1",
     "expo": "^35.0.0",
     "firebase": "^7.1.0",
     "lodash.range": "^3.2.0",

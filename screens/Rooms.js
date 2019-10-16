@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
-import TabNavigator from '../navigation/TabNavigator'
 import {
   StyleSheet,
   Text,
@@ -9,6 +8,7 @@ import {
   Button,
   Prompt
 } from 'react-native';
+import { connect } from 'react-redux';
 
 class Rooms extends React.Component {
   state = { roomname: '',user1:'', user2:'', errorMessage: null }
@@ -85,11 +85,11 @@ render() {
 function mapStateToProps(state) {
   return {
     room: state.newroom,
-    room: state.roomquery
+    room2: state.roomquery
   };
 }
 
-export default connect(mapStateToProps)(Room);
+export default connect(mapStateToProps)(Rooms);
 
 const styles = StyleSheet.create({
   container: {

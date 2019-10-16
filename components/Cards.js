@@ -4,8 +4,7 @@ import styles from '../styles'
 import { 
   Text, 
   View,
-  ImageBackground,
-  TouchableOpacity,
+  Image
 } from 'react-native';
 
 class Cards extends React.Component {
@@ -16,10 +15,10 @@ class Cards extends React.Component {
 
   render() {
     return (
-            <View style={styles.cardInfo}>
-              <Text style={styles.bold}>{this.props.name}</Text>
-              <Text>{this.props.aboutMe}</Text>
-            </View>
+      <View>
+        <Image style={styles.card} source={{uri: this.state.images[2]}} />
+        <Text>{this.state.text}</Text>
+      </View>
     )
   }
 }

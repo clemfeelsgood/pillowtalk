@@ -15,7 +15,7 @@ class Profile extends React.Component {
   render() {
     return (
      <View>
-      <Text>(this.props.user.name)</Text>
+      <Text>this.props.user.name</Text>
      </View>
     )
   }
