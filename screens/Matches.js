@@ -60,23 +60,26 @@ class Matches extends React.Component {
     var cardsref = firebase.firestore().collection("cards");
     const boards = [];
     idlist.forEach(function(element) {
-      return cardsref.doc(element).get().then(doc => {
-        if (doc.exists) {
-          const { text, image, category } = doc.data();
-          boards.push({
-            key: doc.id,
-            text,
-            image,
-            category
-          });
-        } else {
-          console.log("No such document! 2");
-        }
-      });
+      return cardsref
+        .doc(element)
+        .get()
+        .then(doc => {
+          if (doc.exists) {
+            const { text, image, category } = doc.data();
+            boards.push({
+              key: doc.id,
+              text,
+              image,
+              category
+            });
+          } else {
+            console.log("No such document! 2");
+          }
+        });
       this.setState({
-      boards
+        boards
+      });
     });
-  });  
   };
 
   intersect = (a, b) => {
@@ -103,7 +106,7 @@ class Matches extends React.Component {
           const swipes = this.intersect(swipes1, swipes2);
           console.log("swipes", swipes);
           this.setState({ swipes: swipes });
-          this.cardsdetails(this.state.swipes).then(result4 => {
+          this.cardsdetails(swipes).then(result4 => {
             console.log(this.state.boards);
           });
         });
