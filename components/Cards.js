@@ -4,21 +4,21 @@ import styles from '../styles'
 import { 
   Text, 
   View,
-  Image
+  ImageBackground,
 } from 'react-native';
 
 class Cards extends React.Component {
-  //state = {
-    //num: 0
-  //}
-
+  
 
   render() {
     return (
-      <View>
-        <Image style={styles.card} source={{uri: this.state.images[2]}} />
-        <Text>{this.state.text}</Text>
-      </View>
+        <ImageBackground style={styles.card} source={{uri: this.props.image}}>
+          <View style={styles.cardDescription}>
+            <View style={styles.cardInfo}>
+              <Text style={styles.bold}>{this.props.text}</Text>
+            </View>
+          </View>
+        </ImageBackground>
     )
   }
 }

@@ -16,6 +16,9 @@ export default reducers = (state = {
       case 'LOGIN': {
         return { ...state, user: action.user, loggedIn: action.loggedIn }
       }
+      case 'SIGNUP': {
+        return { ...state, user: action.user, loggedIn: action.loggedIn }
+      }
       case 'LOGOUT': {
         return { ...state, loggedIn: action.loggedIn }
       }

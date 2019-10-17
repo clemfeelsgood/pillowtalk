@@ -4,8 +4,10 @@ import * as firebase from "firebase";
 import Rooms from "./Rooms";
 import firebaseConfig from "../config/firebase.js";
 import "firebase/firestore";
+import { login } from "../redux/actions";
+import { connect } from "react-redux";
 
-export default class SignUp extends React.Component {
+class SignUp extends React.Component {
   state = { name: "", email: "", password: "", errorMessage: null };
 
   handleSignUp = () => {
@@ -13,18 +15,11 @@ export default class SignUp extends React.Component {
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
       .then(() => this.props.navigation.navigate("Rooms"))
-      .catch(error => this.setState({ errorMessage: error.message }));
+      .catch(error => this.setState({ errorMessage: error.message }));     
 
-    var db = firebase.firestore();
-    const userRef = db.collection("users").add({
-      name: this.state.name,
-      email: this.state.email
-    });
-    this.setState({
-      name: "",
-      email: ""
-    });
   };
+
+ 
 
   render() {
     return (
@@ -65,6 +60,16 @@ export default class SignUp extends React.Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    loggedIn: state.loggedIn,
+    name: state.name,
+    email: state.email
+  };
+}
+
+export default connect(mapStateToProps)(SignUp);
 
 const styles = StyleSheet.create({
   container: {

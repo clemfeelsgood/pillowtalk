@@ -3,7 +3,14 @@ import styles from "../styles";
 import { connect } from "react-redux";
 import * as firebase from "firebase";
 
-import { Text, ScrollView, TouchableOpacity, Image, View } from "react-native";
+import {
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  View,
+  ListItem
+} from "react-native";
 
 class Matches extends React.Component {
   constructor() {
@@ -15,6 +22,7 @@ class Matches extends React.Component {
       userid1: "",
       userid2: "",
       key: "",
+      boards: [],
       swipes: [],
       swipes1: [],
       swipes2: []
@@ -51,7 +59,7 @@ class Matches extends React.Component {
             swipes: user.swipesyes
           });
         } else {
-          console.log("No such document! 2");
+          console.log("No such document!");
         }
       });
   };
@@ -59,7 +67,7 @@ class Matches extends React.Component {
   cardsdetails = idlist => {
     var cardsref = firebase.firestore().collection("cards");
     const boards = [];
-    idlist.forEach(function(element) {
+    const cardsmapPromises = idlist.map(function(element) {
       return cardsref
         .doc(element)
         .get()
@@ -76,10 +84,12 @@ class Matches extends React.Component {
             console.log("No such document! 2");
           }
         });
-      this.setState({
-        boards
-      });
     });
+    this.setState({
+      boards
+    });
+    return Promise.all(cardsmapPromises);
+    console.log(cardsmapPromises);
   };
 
   intersect = (a, b) => {
@@ -107,11 +117,10 @@ class Matches extends React.Component {
           console.log("swipes", swipes);
           this.setState({ swipes: swipes });
           this.cardsdetails(swipes).then(result4 => {
-            console.log(this.state.boards);
+            console.log("boards", this.state.boards);
           });
         });
       });
-      console.log("at the end of this.usersinroom");
     });
   }
 
@@ -119,10 +128,13 @@ class Matches extends React.Component {
     return (
       <View style={styles.container}>
         <ScrollView>
-          {this.state.swipes1.map(uri => {
-            <TouchableOpacity style={styles.imgRow}>
-              <Text style={[styles.bold, styles.center]}>{uri}</Text>
-            </TouchableOpacity>;
+          {this.state.boards.map(uri => {
+            return (
+              <view>
+                <Image style={styles.img} source={{ uri: uri.image }} />
+                <Text>{uri.text}</Text>
+              </view>
+            );
           })}
         </ScrollView>
       </View>

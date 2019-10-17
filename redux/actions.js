@@ -1,10 +1,10 @@
 import * as firebase from "firebase";
 
 export function login(user) {
-	return function() {
+	return function(dispatch) {
 		let params = {
 			id: user.uid,
-			name: user.displayName,
+			name: "",
 			swipesyes: [],
 			swipesno: [],
 			notification: false,
@@ -29,10 +29,10 @@ export function login(user) {
 						.firestore()
 						.collection("users")
 						.doc(user.uid)
-						.update({
+						.set({
 							params
 						});
-					dispatch({ type: "LOGIN", user: params, loggedIn: true });
+					dispatch({ type: "SIGNUP", user: params, loggedIn: true });
 				}
 			});
 	};
@@ -47,24 +47,23 @@ export function logout() {
 
 export function getCards() {
 	return function(dispatch) {
-		const cards = [];
-		firebase
-			.firestore()
-			.collection("cards")
-			.get()
-			.then(querySnapshot => {
-				querySnapshot.forEach(doc => {
+		const items = [];
+		const ref = firebase.firestore().collection('cards');
+		return ref.get()
+			.then(function(querySnapshot) {
+				querySnapshot.forEach(function(doc) {
 					const card = doc.data();
 					const text = card.text;
+					console.log(text);
 					const image = card.image;
-					cards.push({
+					items.push({
 						id: doc.id,
-						doc, // DocumentSnapshot
 						text,
 						image
 					});
 				});
+				dispatch({ type: "GET_CARDS", payload: items });
 			});
-		dispatch({ type: "GET_CARDS", payload: cards });
+		
 	};
 }
