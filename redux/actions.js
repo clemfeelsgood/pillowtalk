@@ -40,35 +40,39 @@ export function login(user, name) {
 	};
 }
 
-export function createRoom(room) {
+export function createRoom(roomname) {
 	return function(dispatch) {
 		var db = firebase.firestore();
 		const userref = firebase.auth().currentUser;
-		var query = db.collection("room").where("roomname", "==", room);
+		var query = db.collection("room").where("roomname", "==", roomname);
+		const room = [];
 		return query
 			.get()
 			.then(function(querySnapshot) {
-				querySnapshot.forEach(function(doc) {
-					if (doc.exists) {
-						Alert.alert(
-							"Room already exists, please pick another name"
-						);
-					} else {
-						db.collection("room")
-							.add({
-								roomname: room,
-								user1: userref.uid,
-								user2: ""
-							})
-							.then(function(docRef) {
-								dispatch({
-									type: "CREATE ROOM",
-									payload: docRef.id
-								});
-								this.props.navigation.navigate("App");
+				if (querySnapshot.empty) {
+					db.collection("room")
+						.add({
+							roomname: roomname,
+							user1: userref.uid,
+							user2: ""
+						})
+						.then(function(docRef) {
+							console.log(docRef);
+							const roomtemp = docRef.data();
+							room.push({
+								id: docRef.id,
+								roomtemp
 							});
-					}
-				});
+						});
+					dispatch({
+						type: "CREATE ROOM",
+						payload: room
+					});
+				} else {
+					Alert.alert(
+						"Room already exists, please pick another name"
+					);
+				}
 			})
 			.catch(function(error) {
 				console.error("Error writing document: ", error);
@@ -76,30 +80,30 @@ export function createRoom(room) {
 	};
 }
 
-export function joinRoom (roomname) {
+export function joinRoom(roomname) {
 	return function(dispatch) {
 		var db = firebase.firestore().collection("room");
 		const userref = firebase.auth().currentUser;
-		return db.where("roomname", "==", roomname)
+		const room = [];
+		return db
+			.where("roomname", "==", roomname)
 			.get()
 			.then(function(querySnapshot) {
-				querySnapshot.forEach(function(doc) {
-					console.log(doc.data());
-					if (doc.exists) {
-						console.log(doc.data());
-						var roomid = doc.id;
-						db.collection("room")
-							.doc(doc.id)
-							.update({
-								user2: "userref.uid"
-							});
-						this.props.navigation.navigate("App");
-						dispatch({ type: "JOIN ROOM", payload: roomid });
-					} else {
-						console.log("no such room");
-						Alert.alert("No such Room");
-					}
-				});
+				if (querySnapshot.empty) {
+					Alert.alert("No such room");
+				} else {
+					querySnapshot.forEach(function(doc) {
+						const roomv = doc.data();
+						room.push({
+							id: doc.id,
+							roomv
+						});
+						db.doc(doc.id).update({
+							user2: userref.uid
+						});
+					});
+				}
+				dispatch({ type: "JOIN ROOM", payload: room });
 			})
 			.catch(function(error) {
 				console.log("Error getting documents: ", error);

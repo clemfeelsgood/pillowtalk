@@ -65,7 +65,8 @@ class Home extends React.Component {
 function mapStateToProps(state) {
   return {
     user: state.user,
-    cards: state.cards
+    cards: state.cards,
+    roomid: state.roomid,
   };
 }
 

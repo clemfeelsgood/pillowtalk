@@ -85,10 +85,12 @@ class Matches extends React.Component {
           }
         });
     });
-    this.setState({
-      boards
-    });
-    return Promise.all(cardsmapPromises);
+
+    return Promise.all(cardsmapPromises).then(result =>
+      this.setState({
+        boards
+      })
+    );
     console.log(cardsmapPromises);
   };
 
@@ -101,8 +103,7 @@ class Matches extends React.Component {
   };
 
   componentWillMount() {
-    //console.log(this.props.roomid);
-    this.usersinroom("OemdFcTJIBiJIMrYPAa3").then(result => {
+    this.usersinroom(this.props.roomid[0].id).then(result => {
       console.log(this.state.userid1);
       console.log(this.state.userid2);
       this.swipesyes(this.state.userid1).then(result2 => {
@@ -116,9 +117,7 @@ class Matches extends React.Component {
           const swipes = this.intersect(swipes1, swipes2);
           console.log("swipes", swipes);
           this.setState({ swipes: swipes });
-          this.cardsdetails(swipes).then(result4 => {
-            console.log("boards", this.state.boards);
-          });
+          return this.cardsdetails(swipes);
         });
       });
     });
@@ -128,13 +127,13 @@ class Matches extends React.Component {
     return (
       <View style={styles.container}>
         <ScrollView>
-        <text> Match List </text>
+          <Text> Match List </Text>
           {this.state.boards.map(uri => {
             return (
-              <view>
+              <View>
                 <Image style={styles.img} source={{ uri: uri.image }} />
                 <Text>{uri.text}</Text>
-              </view>
+              </View>
             );
           })}
         </ScrollView>
@@ -147,7 +146,7 @@ function mapStateToProps(state) {
   return {
     swipes: state.swipes,
     user: state.user,
-    room: state.roomid,
+    roomid: state.roomid
   };
 }
 

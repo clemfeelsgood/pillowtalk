@@ -9,11 +9,27 @@ import {
   Prompt
 } from "react-native";
 import { connect } from "react-redux";
-import { createRoom, joinRoom } from '../redux/actions'
+import { createRoom, joinRoom } from "../redux/actions";
 
 class Rooms extends React.Component {
   state = { roomname: "", user1: "", user2: "", errorMessage: null };
 
+  createroom = () => {
+    this.props.dispatch(createRoom(this.state.newroom)).then(result => {
+      if (this.props.roomid.length > 0) {
+        this.props.navigation.navigate("App");
+      }
+    });
+  };
+
+  joinroom = () => {
+    this.props.dispatch(joinRoom(this.state.roomquery)).then(result => {
+      if (this.props.roomid.length > 0) {
+        console.log(this.props.roomid);
+        this.props.navigation.navigate("App");
+      }
+    });
+  };
 
   render() {
     return (
@@ -29,7 +45,7 @@ class Rooms extends React.Component {
           onChangeText={newroom => this.setState({ newroom })}
           value={this.state.newroom}
         />
-        <Button title="Create Room" onPress={() => this.props.dispatch(createRoom(this.state.newroom)) } />
+        <Button title="Create Room" onPress={this.createroom} />
 
         <TextInput
           placeholder="What's the room name?"
@@ -39,15 +55,17 @@ class Rooms extends React.Component {
           value={this.state.roomquery}
         />
 
-        <Button title="Join Room" onPress={() => this.props.dispatch(joinRoom(this.state.roomquery))} />
+        <Button title="Join Room" onPress={this.joinroom} />
       </View>
     );
   }
 }
+//
 
 function mapStateToProps(state) {
   return {
-    user: state.user
+    user: state.user,
+    roomid: state.roomid
   };
 }
 

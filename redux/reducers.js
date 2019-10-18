@@ -1,7 +1,7 @@
 export default reducers = (state = {
     loggedIn: false,
     cards: [],
-    roomid:'',
+    roomid:[],
     user: {
       id: '',
       name: '',
@@ -25,10 +25,10 @@ export default reducers = (state = {
         return { ...state, cards: action.payload
       }
       case 'JOIN ROOM':      
-        return { ...state, room: action.payload
+        return { ...state, roomid: action.payload
       }
       case 'CREATE ROOM':      
-        return { ...state, room: action.payload
+        return { ...state, roomid: action.payload
       }
     }
     return state;

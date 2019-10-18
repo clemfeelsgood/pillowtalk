@@ -1,27 +1,22 @@
-import React from 'react';
-import styles from '../styles';
-import { connect } from 'react-redux';
+import React from "react";
+import styles from "../styles";
+import { connect } from "react-redux";
 
-import { 
-  Text, 
-  View
-} from 'react-native';
+import { Text, View } from "react-native";
 
 class Profile extends React.Component {
-  state = {}
+  state = {};
 
   componentWillMount() {}
 
   render() {
     return (
-     <View>
-      <Text>this.props.user.name</Text>
-     </View>
-    )
+      <View>
+        <Text>{this.props.user.name}</Text>
+      </View>
+    );
   }
 }
-
-
 
 function mapStateToProps(state) {
   return {
