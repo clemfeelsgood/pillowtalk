@@ -16,6 +16,7 @@ class Home extends React.Component {
     this.state = {
       userid: userref.uid,
     };
+    //console.log(this.props.user.id);
   }
 
   componentWillMount() {

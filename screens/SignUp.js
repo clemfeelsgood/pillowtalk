@@ -17,9 +17,13 @@ class SignUp extends React.Component {
       .then(() => this.props.navigation.navigate("Rooms"))
       .catch(error => this.setState({ errorMessage: error.message }));     
 
-  };
+      firebase.auth().onAuthStateChanged((user) => {
+      if (user != null) {
+        this.props.dispatch(login(user, this.state.name))
+      }
+    });
 
- 
+  }; 
 
   render() {
     return (
@@ -64,8 +68,6 @@ class SignUp extends React.Component {
 function mapStateToProps(state) {
   return {
     loggedIn: state.loggedIn,
-    name: state.name,
-    email: state.email
   };
 }
 

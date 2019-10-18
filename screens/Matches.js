@@ -101,7 +101,7 @@ class Matches extends React.Component {
   };
 
   componentWillMount() {
-    //console.log(this.props.room);
+    //console.log(this.props.roomid);
     this.usersinroom("OemdFcTJIBiJIMrYPAa3").then(result => {
       console.log(this.state.userid1);
       console.log(this.state.userid2);
@@ -128,6 +128,7 @@ class Matches extends React.Component {
     return (
       <View style={styles.container}>
         <ScrollView>
+        <text> Match List </text>
           {this.state.boards.map(uri => {
             return (
               <view>
@@ -144,7 +145,9 @@ class Matches extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    swipes: state.swipes
+    swipes: state.swipes,
+    user: state.user,
+    room: state.roomid,
   };
 }
 

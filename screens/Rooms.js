@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import * as firebase from 'firebase';
+import React, { Component } from "react";
+import * as firebase from "firebase";
 import {
   StyleSheet,
   Text,
@@ -7,57 +7,21 @@ import {
   TextInput,
   Button,
   Prompt
-} from 'react-native';
-import { connect } from 'react-redux';
+} from "react-native";
+import { connect } from "react-redux";
+import { createRoom, joinRoom } from '../redux/actions'
 
 class Rooms extends React.Component {
-  state = { roomname: '',user1:'', user2:'', errorMessage: null }
-
-createRoom = () => {
-var db = firebase.firestore();
-
- db.collection("room").add({
-    roomname: this.state.newroom,
-    user1: "clem",
-    user2: "",
-})
-
-.then(() => this.props.navigation.navigate('App'))
-
-.catch(function(error) {
-    console.error("Error writing document: ", error);
-});
-}
+  state = { roomname: "", user1: "", user2: "", errorMessage: null };
 
 
-joinRoom = () => {
-var db = firebase.firestore();
-var query = db.collection("room").where("roomname", "==", this.state.roomquery)
-
-query.get()
-    .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-    // doc.data() is never undefined for query doc snapshots
-            
-            db.collection("room").doc(doc.id).update({
-              user2: "charlotte"
-            }); 
-
-            //console.log(doc.id, " => ", doc.data());  
-        });
-    })
-    .catch(function(error) {
-        console.log("Error getting documents: ", error);
-    })
-
-.then(() => this.props.navigation.navigate('App'))
-}
-
-render() {
+  render() {
     return (
       <View style={styles.container}>
         <Text>Room</Text>
-        {this.state.errorMessage && <Text style={{ color: 'red' }}> {this.state.errorMessage} </Text>}
+        {this.state.errorMessage && (
+          <Text style={{ color: "red" }}> {this.state.errorMessage} </Text>
+        )}
         <TextInput
           placeholder="Choose your room name"
           autoCapitalize="none"
@@ -65,7 +29,7 @@ render() {
           onChangeText={newroom => this.setState({ newroom })}
           value={this.state.newroom}
         />
-        <Button title="Create Room" onPress={this.createRoom} />
+        <Button title="Create Room" onPress={() => this.props.dispatch(createRoom(this.state.newroom)) } />
 
         <TextInput
           placeholder="What's the room name?"
@@ -74,18 +38,16 @@ render() {
           onChangeText={roomquery => this.setState({ roomquery })}
           value={this.state.roomquery}
         />
-        
-        <Button title="Join Room" onPress={this.joinRoom} />
-      
+
+        <Button title="Join Room" onPress={() => this.props.dispatch(joinRoom(this.state.roomquery))} />
       </View>
-    )
-  };
+    );
+  }
 }
 
 function mapStateToProps(state) {
   return {
-    room: state.newroom,
-    room2: state.roomquery
+    user: state.user
   };
 }
 
@@ -94,14 +56,14 @@ export default connect(mapStateToProps)(Rooms);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center"
   },
   textInput: {
     height: 40,
-    width: '90%',
-    borderColor: 'gray',
+    width: "90%",
+    borderColor: "gray",
     borderWidth: 1,
     marginTop: 8
   }
-})
+});
