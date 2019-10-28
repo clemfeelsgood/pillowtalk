@@ -1,76 +1,90 @@
-import React, { Component } from 'react';
-
+import React, { Component } from "react";
+import * as firebase from "firebase";
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
-  Button
-} from 'react-native';
+  Button,
+  Prompt,
+  TouchableOpacity
+} from "react-native";
+import { connect } from "react-redux";
+import styles from "../styles";
+import { createRoom, joinRoom } from "../redux/actions";
+import { Input } from 'react-native-elements';
 
-import Prompt from 'react-native-prompt';
+class Rooms extends React.Component {
+  state = { roomname: "", user1: "", user2: "", errorMessage: null };
 
-export default class Home extends Component {
+  createroom = () => {
+    this.props.dispatch(createRoom(this.state.newroom)).then(result => {
+      if (this.props.roomid.length > 0) {
+        //const timestamp = this.props.roomid[0].timestamp;
+        //const day = this.props.roomid[0].day;
+        //const cards = this.props.roomid[0].cards;
+        //this.props.dispatch(getCards(timestamp,day,cards))
+      }
+    });
+  };
+
+  joinroom = () => {
+    this.props.dispatch(joinRoom(this.state.roomquery)).then(result => {
+      if (this.props.roomid.length > 0) {
+        this.props.navigation.navigate("App");
+      }
+    });
+  };
 
   render() {
+    return (
+      <View style={[styles.container, styles.center]}>
+        <Text style={styles.h2}>Connecting you with your partner</Text>
+        <Text style={styles.h3}>If your partner already joined and created a room, use the name he created, otherwise pick a name and share it with your partner</Text>
+        {this.state.errorMessage && (
+          <Text style={{ color: "red" }}> {this.state.errorMessage} </Text>
+        )}
+        
+        <Input
+          placeholder="Name of the room you want to join?"
+          autoCapitalize="none"
+          style={styles.textInput}
+          onChangeText={roomquery => this.setState({ roomquery })}
+          value={this.state.roomquery}
+        /> 
 
-    return (        
-      <View style={styles.content_container}>
-        <View style={styles.input_container}>
-          <TextInput
-            style={styles.text_input}
-            onChangeText={this.props.onChangeUsername}
-            placeholder={"What's your name?"}
-            maxLength={20}
-            value={this.props.username}
-          />
-        </View>
+        <TouchableOpacity onPress={this.joinroom}>
+        <Text style={styles.button}> Join Room </Text>
+        </TouchableOpacity>
 
-        <View style={styles.button_container}>
-          <Button
-            onPress={this.props.onPressCreateRoom}
-            title="Create Room"
-            color="#4c87ea"
-            style={styles.button}
-          />
-          <Button
-            onPress={this.props.onPressJoinRoom}
-            title="Join Room"
-            color="#1C1C1C"
-            style={styles.button}
-          />
-        </View>
-
-        <Prompt
-          title="Enter Room Name"
-          visible={this.props.show_prompt}
-          onSubmit={this.props.joinRoom}
-          onCancel={this.props.onCancelJoinRoom}
+        <Input
+          placeholder="Choose your room name"
+          autoCapitalize="none"
+          style={styles.textInput}
+          onChangeText={newroom => this.setState({ newroom })}
+          value={this.state.newroom}
         />
+        
+        <TouchableOpacity onPress={this.createroom}>
+        <Text style={styles.button}> Create Room </Text>
+        </TouchableOpacity>
+        
+        
+        
+        
       </View>
     );
   }
 }
+//
 
-const styles = StyleSheet.create({
-  content_container: {
-    flex: 1
-  },
-  input_container: {
-    marginBottom: 20
-  },
-  button_container: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center'
-  },
-  text_input: {
-    backgroundColor: '#FFF',
-    height: 40,
-    borderColor: '#CCC', 
-    borderWidth: 1
-  },
-  button: {
-    flex: 1
-  }
-});
+function mapStateToProps(state) {
+  return {
+    user: state.user,
+    roomid: state.roomid
+  };
+}
+
+export default connect(mapStateToProps)(Rooms);
+
+

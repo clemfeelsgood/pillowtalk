@@ -1,3 +1,5 @@
+
+
 const firebaseConfig = {
    apiKey: "AIzaSyDBuY8yY4GxbPqGxXmr5FV0OP9xT0JJ_FY",
     authDomain: "pillow-talk-10891.firebaseapp.com",
@@ -10,3 +12,5 @@ const firebaseConfig = {
 };
 
 module.exports = firebaseConfig
+
+
