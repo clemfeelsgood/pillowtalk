@@ -29,13 +29,12 @@ class Home extends React.Component {
   handleYup(card) {
     const userref = firebase.auth().currentUser;
     const newyes = card.id
-    
     firebase
       .firestore()
       .collection("users")
       .doc(userref.uid)
       .update({
-        swipesyes: firebase.firestore.FieldValue.arrayUnion(card.id)
+        swipesyes: firebase.firestore.FieldValue.arrayUnion(newyes)
       });
 
     //Check Match card: use usersinroom to get user2. Make sure that you are indeed taking the other user,

@@ -21,6 +21,7 @@ class Instructions extends React.Component {
 
   render() {
     if (this.props.inroom) {
+      // aussi un probleme ici pour passer directment si l'utilisateur a deja une room
       console.log("in instructions",this.props.inroom)
       return(
         <Text>Dead-end</Text>)
