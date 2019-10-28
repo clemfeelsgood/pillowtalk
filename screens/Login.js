@@ -12,6 +12,7 @@ import {
 import * as firebase from "firebase";
 import { login } from "../redux/actions";
 import styles from '../styles'
+import RootNavigator from '../navigation/RootNavigator'
 import firebaseConfig from "../config/firebase.js";
 import 'firebase/firestore';
 import { connect } from "react-redux";
@@ -40,8 +41,11 @@ class Login extends React.Component {
 
   render() {
     if(this.props.loggedIn){
-      return(this.props.navigation.navigate("Instructions"))
-      } else {
+      return(
+        <RootNavigator/>
+        )
+      } 
+      else {
     return (
       <View style={[styles.container, styles.center]}>
       <Image style={styles.logo} source={require('../assets/pillowtalk-logo.png')}/>

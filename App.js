@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './styles.js'
-import RootNavigator from './navigation/RootNavigator';
+import Login from './screens/Login';
 import { Text, View, YellowBox } from 'react-native';
 import * as Font from 'expo-font';
 
@@ -24,7 +24,7 @@ componentDidMount() {
   render() {
     return (
       <Provider store={store}>
-        <RootNavigator/>
+        <Login/>
       </Provider>
     );
   }

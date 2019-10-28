@@ -1,7 +1,8 @@
 import * as firebase from "firebase";
 import { Alert } from "react-native";
-import {  Notifications } from 'expo';
-import * as Permissions from 'expo-permissions';
+import { Notifications } from "expo";
+import * as Permissions from "expo-permissions";
+import "firebase/firestore";
 
 export function login(user, name) {
 	return function(dispatch) {
@@ -11,7 +12,9 @@ export function login(user, name) {
 			email: user.email,
 			notification: false,
 			token: " ",
-			room:'',
+			room: "",
+			swipesyes: [],
+			swipesno: []
 		};
 		firebase
 			.firestore()
@@ -37,7 +40,9 @@ export function login(user, name) {
 							email: params.email,
 							notification: params.notification,
 							token: params.token,
-							room: ''
+							room: "",
+							swipesyes: [],
+							swipesno: []
 						});
 					dispatch({ type: "SIGNUP", user: params, loggedIn: true });
 				}
@@ -61,9 +66,9 @@ export function createRoom(roomname) {
 						roomname: roomname,
 						user1: userref.uid,
 						user2: "",
-						cards:[],
-						day:1,
-						timestamp: createdat,
+						cards: [],
+						day: 1,
+						timestamp: createdat
 					});
 					return newRoomRef.get().then(function(doc) {
 						if (doc.exists) {
@@ -81,9 +86,10 @@ export function createRoom(roomname) {
 							console.log("cannot find document just created");
 						}
 						dispatch({
-					type: "CREATE ROOM",
-					payload: room
-				});
+							type: "CREATE ROOM",
+							payload: room,
+							inroom: true
+						});
 					});
 				} else {
 					Alert.alert(
@@ -119,15 +125,20 @@ export function joinRoom(roomname) {
 							roomname: roomv.roomname,
 							user1: roomv.user1,
 							user2: roomv.user2,
+							cards: roomv.cards,
 							day: roomv.day,
 							timestamp: roomv.timestamp
 						});
-						firebase.firestore().collection("users").doc(userref.uid).update({
-							room: roomv.roomname
-						})
+						firebase
+							.firestore()
+							.collection("users")
+							.doc(userref.uid)
+							.update({
+								room: doc.id
+							});
 					});
 				}
-				dispatch({ type: "JOIN ROOM", payload: room });
+				dispatch({ type: "JOIN ROOM", payload: room, inroom: true });
 			})
 			.catch(function(error) {
 				console.log("Error getting documents: ", error);
@@ -142,89 +153,129 @@ export function logout() {
 	};
 }
 
-export function getCards(timestamp,day,cards) {
+export function leaveroom() {
 	return function(dispatch) {
-		const now = new Date();
-		var Difference_In_Days = (now.getTime() - timestamp.getTime())/ (1000 * 3600 * 24); 
-		const cards = [];
-		if (Difference_In_Days>=0) {
-		const newday = day +1;
-		const ref = firebase.firestore().collection("cards");
-		return ref.where('Day', '==', newday).get().then(function(querySnapshot) {
-			if (querySnapshot.empty) {
-					Alert.alert("No such card");
-				}
-			else{
-			const newcards = [];	
-			querySnapshot.forEach(function(doc) {
-				const card = doc.data();
-				const text = card.Text;
-				const GIF = card.GIF;
-				newcards.push({
-					id: doc.id,
-					text,
-					GIF
-				});
-			});
-			
-			console.log(cards);
-			dispatch({ type: "GET_CARDS", payload: newcards });
-			}
-
-			//update room with cards
-			
-		});
-
-		
-		}
-		else {
-			console.log("return already in use cards")
-			dispatch({ type: "GET_CARDS", payload: cards });
-			//need to initialize cards for day 1
-		}
-		
-		
+		//firebase.auth().signOut();
+		dispatch({ type: "LEAVEROOM", inroom: false });
 	};
 }
 
-export function allowNotifications(){
-	return function(dispatch){
-		Permissions.getAsync(Permissions.NOTIFICATIONS).then(function(result){
-		  if (result.status === 'granted') {
-		    Notifications.getExpoPushTokenAsync().then(function(token){
-		      firebase
+export function getCards(timestamp, day, cards, roomid) {
+	return function(dispatch) {
+		const now = new Date();
+		var Difference_In_Days =
+			(now.getTime() - timestamp.getTime()) / (1000 * 3600 * 24);
+		const userref = firebase.auth().currentUser;
+		const newcards = cards;
+		const room = roomid;
+		const ref = firebase.firestore().collection("cards");
+		if (Difference_In_Days >= 1) {
+			const newday = day + 1;
+			return ref
+				.where("Day", "==", newday)
+				.get()
+				.then(function(querySnapshot) {
+					if (querySnapshot.empty) {
+						Alert.alert("No such card");
+					} else {
+						querySnapshot.forEach(function(doc) {
+							const card = doc.data();
+							const text = card.Text;
+							const GIF = card.GIF;
+							newcards.push({
+								id: doc.id,
+								text,
+								GIF
+							});
+						});
+						dispatch({ type: "GET_CARDS", payload: newcards });
+						firebase
+							.firestore()
+							.collection("room")
+							.doc(roomid)
+							.update({
+								cards: newcards,
+								day: newday
+							});
+					}
+				});
+		} else {
+			if ((day, "==", 1)) {
+				return ref
+					.where("Day", "==", 1)
+					.get()
+					.then(function(querySnapshot) {
+						if (querySnapshot.empty) {
+							Alert.alert("No such card 2");
+						} else {
+							querySnapshot.forEach(function(doc) {
+								const card = doc.data();
+								const text = card.Text;
+								const GIF = card.GIF;
+								newcards.push({
+									id: doc.id,
+									text,
+									GIF
+								});
+							});
+							dispatch({ type: "GET_CARDS", payload: newcards });
+							firebase
+								.firestore()
+								.collection("room")
+								.doc(roomid)
+								.update({
+									cards: newcards,
+								});
+						}
+					});
+			}
+		else{
+			console.log("return already in use cards");
+			dispatch({ type: "GET_CARDS", payload: newcards });
+			}	
+		}
+	};
+}
+
+export function allowNotifications() {
+	return function(dispatch) {
+		Permissions.getAsync(Permissions.NOTIFICATIONS).then(function(result) {
+			if (result.status === "granted") {
+				Notifications.getExpoPushTokenAsync().then(function(token) {
+					firebase
 						.firestore()
 						.collection("users")
 						.doc(firebase.auth().currentUser.uid)
 						.update({
 							token: token
 						});
-		      dispatch({ type: 'ALLOW_NOTIFICATIONS', payload: token });
-		    })
-		  }
-		})
-	}
+					dispatch({ type: "ALLOW_NOTIFICATIONS", payload: token });
+				});
+			}
+		});
+	};
 }
 
-export function sendNotification(id, name, text){
-  return function(dispatch){
-    firebase.database().ref('cards/' + id).once('value', (snap) => {
-      if(snap.val().token != null){
-
-        return fetch('https://exp.host/--/api/v2/push/send', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            to: snap.val().token,
-            title: name,
-            body: text,
-          }),
-        });
-
-      }
-    });
-  }
+export function sendNotification(id, name, text) {
+	return function(dispatch) {
+		firebase
+			.database()
+			.ref("cards/" + id)
+			.once("value", snap => {
+				if (snap.val().token != null) {
+					return fetch("https://exp.host/--/api/v2/push/send", {
+						method: "POST",
+						headers: {
+							Accept: "application/json",
+							"Content-Type": "application/json"
+						},
+						body: JSON.stringify({
+							to: snap.val().token,
+							title: name,
+							body: text
+						})
+					});
+				}
+			});
+	};
 }

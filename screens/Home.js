@@ -14,21 +14,22 @@ class Home extends React.Component {
     super();
     const userref = firebase.auth().currentUser;
     this.state = {
-      userid: userref.uid,
+      userid: userref.uid
     };
-    //console.log(this.props.user.id);
   }
 
   componentWillMount() {
     const timestamp = this.props.roomid[0].timestamp;
     const cards = this.props.roomid[0].cards;
     const day = this.props.roomid[0].day;
-    this.props.dispatch(getCards(timestamp,day,cards));
+    const roomid = this.props.roomid[0].id;
+    this.props.dispatch(getCards(timestamp, day, cards, roomid))
   }
-
 
   handleYup(card) {
     const userref = firebase.auth().currentUser;
+    const newyes = card.id
+    
     firebase
       .firestore()
       .collection("users")
@@ -37,7 +38,7 @@ class Home extends React.Component {
         swipesyes: firebase.firestore.FieldValue.arrayUnion(card.id)
       });
 
-      //Check Match card: use usersinroom to get user2. Make sure that you are indeed taking the other user,
+    //Check Match card: use usersinroom to get user2. Make sure that you are indeed taking the other user,
     //get swipes yes from user2
     //if card.id is in swipes yes return alert + notification
   }
@@ -62,7 +63,7 @@ class Home extends React.Component {
         renderNoMoreCards={() => <NoCards />}
         showYup={true}
         showNope={true}
-        handleYup={this.handleYup}
+        handleYup={this.handleYup.bind(this)}
         handleNope={this.handleNope}
         hasMaybeAction={false}
       />
@@ -73,8 +74,9 @@ class Home extends React.Component {
 function mapStateToProps(state) {
   return {
     user: state.user,
-    cards: state.cards,
     roomid: state.roomid,
+    cards: state.cards,
+    inroom: state.inroom
   };
 }
 

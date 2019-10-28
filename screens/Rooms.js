@@ -20,7 +20,10 @@ class Rooms extends React.Component {
   createroom = () => {
     this.props.dispatch(createRoom(this.state.newroom)).then(result => {
       if (this.props.roomid.length > 0) {
-        this.props.navigation.navigate("App");
+        //const timestamp = this.props.roomid[0].timestamp;
+        //const day = this.props.roomid[0].day;
+        //const cards = this.props.roomid[0].cards;
+        //this.props.dispatch(getCards(timestamp,day,cards))
       }
     });
   };
