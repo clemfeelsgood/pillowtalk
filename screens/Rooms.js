@@ -6,10 +6,13 @@ import {
   View,
   TextInput,
   Button,
-  Prompt
+  Prompt,
+  TouchableOpacity
 } from "react-native";
 import { connect } from "react-redux";
+import styles from "../styles";
 import { createRoom, joinRoom } from "../redux/actions";
+import { Input } from 'react-native-elements';
 
 class Rooms extends React.Component {
   state = { roomname: "", user1: "", user2: "", errorMessage: null };
@@ -25,7 +28,6 @@ class Rooms extends React.Component {
   joinroom = () => {
     this.props.dispatch(joinRoom(this.state.roomquery)).then(result => {
       if (this.props.roomid.length > 0) {
-        console.log(this.props.roomid);
         this.props.navigation.navigate("App");
       }
     });
@@ -33,29 +35,40 @@ class Rooms extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Room</Text>
+      <View style={[styles.container, styles.center]}>
+        <Text style={styles.h2}>Connecting you with your partner</Text>
+        <Text style={styles.h3}>If your partner already joined and created a room, use the name he created, otherwise pick a name and share it with your partner</Text>
         {this.state.errorMessage && (
           <Text style={{ color: "red" }}> {this.state.errorMessage} </Text>
         )}
-        <TextInput
+        
+        <Input
+          placeholder="Name of the room you want to join?"
+          autoCapitalize="none"
+          style={styles.textInput}
+          onChangeText={roomquery => this.setState({ roomquery })}
+          value={this.state.roomquery}
+        /> 
+
+        <TouchableOpacity onPress={this.joinroom}>
+        <Text style={styles.button}> Join Room </Text>
+        </TouchableOpacity>
+
+        <Input
           placeholder="Choose your room name"
           autoCapitalize="none"
           style={styles.textInput}
           onChangeText={newroom => this.setState({ newroom })}
           value={this.state.newroom}
         />
-        <Button title="Create Room" onPress={this.createroom} />
-
-        <TextInput
-          placeholder="What's the room name?"
-          autoCapitalize="none"
-          style={styles.textInput}
-          onChangeText={roomquery => this.setState({ roomquery })}
-          value={this.state.roomquery}
-        />
-
-        <Button title="Join Room" onPress={this.joinroom} />
+        
+        <TouchableOpacity onPress={this.createroom}>
+        <Text style={styles.button}> Create Room </Text>
+        </TouchableOpacity>
+        
+        
+        
+        
       </View>
     );
   }
@@ -71,17 +84,4 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps)(Rooms);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  textInput: {
-    height: 40,
-    width: "90%",
-    borderColor: "gray",
-    borderWidth: 1,
-    marginTop: 8
-  }
-});
+

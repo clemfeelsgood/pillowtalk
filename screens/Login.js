@@ -5,15 +5,18 @@ import {
   TextInput,
   View,
   Navigator,
-  Button
+  Image,
+  Button,
+  TouchableOpacity
 } from "react-native";
 import * as firebase from "firebase";
-import Rooms from "./Rooms";
 import { login } from "../redux/actions";
-import TabNavigator from "../navigation/TabNavigator";
-import Signup from "./SignUp";
+import styles from '../styles'
 import firebaseConfig from "../config/firebase.js";
+import 'firebase/firestore';
 import { connect } from "react-redux";
+import { Input } from 'react-native-elements';
+
 firebase.initializeApp(firebaseConfig);
 
 class Login extends React.Component {
@@ -23,7 +26,7 @@ class Login extends React.Component {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
-      .then(() => this.props.navigation.navigate("Rooms"))
+      .then(() => this.props.navigation.navigate("Instructions"))
       .catch(error => this.setState({ errorMessage: error.message }));
   };
 
@@ -36,36 +39,46 @@ class Login extends React.Component {
   }
 
   render() {
+    if(this.props.loggedIn){
+      return(this.props.navigation.navigate("Instructions"))
+      } else {
     return (
-      <View style={styles.container}>
-        <Text>Login</Text>
+      <View style={[styles.container, styles.center]}>
+      <Image style={styles.logo} source={require('../assets/pillowtalk-logo.png')}/>
+        
+        <Text style={styles.h2}>Welcome, please Login or SignUp</Text>
         {this.state.errorMessage && (
           <Text style={{ color: "red" }}>{this.state.errorMessage}</Text>
         )}
-        <TextInput
-          style={styles.textInput}
+        
+        <Input
+          placeholder='Email'
           autoCapitalize="none"
-          placeholder="Email"
           onChangeText={email => this.setState({ email })}
           value={this.state.email}
-        />
-        <TextInput
+        /> 
+
+        <Input
           secureTextEntry
-          style={styles.textInput}
           autoCapitalize="none"
           placeholder="Password"
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
-        />
-        <Button title="Login" onPress={this.handleLogin} />
+        /> 
+        
+        <TouchableOpacity onPress={this.handleLogin}>
+        <Text style={styles.button}> Login </Text>
+        </TouchableOpacity>
 
         <Button
+        style={styles.button}
           title="Don't have an account? Sign Up"
           onPress={() => this.props.navigation.navigate("SignUp")}
         />
       </View>
     );
   }
+}
 }
 
 function mapStateToProps(state) {
@@ -76,17 +89,5 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps)(Login);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  textInput: {
-    height: 40,
-    width: "90%",
-    borderColor: "gray",
-    borderWidth: 1,
-    marginTop: 8
-  }
-});
+
+

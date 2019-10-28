@@ -8,9 +8,33 @@ var deviceHeight = Dimensions.get('window').height;
 var styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding:10
   },
   color: {
-  	color: '#df4723'
+    color: '#df4723'
+  },
+  logo: {
+    width: deviceWidth*0.9,
+    padding: 30
+
+  },
+  h1: {
+
+  },
+  h2: {
+    fontSize: 20,
+    marginTop: 30,
+    marginBottom: 30,
+    color: '#0637CC',
+  },
+  h3: {
+    fontSize: 15,
+    marginTop: 10,
+    marginBottom: 15,
+    color: '#868686',
+   } ,
+  nav: {
+    marginTop: 70
   },
   center: {
     alignItems: 'center',
@@ -18,16 +42,17 @@ var styles = StyleSheet.create({
     textAlign: 'center'
   },
   img: {
-  	width: 80,
-  	height: 80,
-  	borderRadius: 40,
-  	margin: 10,
-  	backgroundColor: '#fff',
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    margin: 10,
+    backgroundColor: '#fff',
   },
+
   imgRow: {
-		flexWrap: 'wrap',
-		flexDirection: 'row',
-		padding: 15,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    padding: 15,
   },
   textInput: {
     width: deviceWidth,
@@ -35,25 +60,42 @@ var styles = StyleSheet.create({
     backgroundColor: '#fff',
     height: 100
   },
+  textInputlogin: {
+    width: deviceWidth*0.7,
+    padding: 15,
+    backgroundColor: '#fff',
+    height: 30,
+    margin: 5,
+    borderRadius: 3,
+    borderWidth: 1,
+    borderColor: '#868686',
+  },
   bold: {
     fontSize: 18,
     fontWeight: 'bold',
   },
   button: {
-	  borderRadius: 15,
-	  borderWidth: 1,
-	  borderColor: '#df4723',
-	  textAlign: 'center',
-	  color: '#df4723',
-	  padding: 15,
-	  margin: 15,
-	  fontSize: 18,
-	  fontWeight: 'bold',
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: '#051033',
+    textAlign: 'center',
+    color: '#051033',
+    padding: 8,
+    margin: 15,
+    fontSize: 15,
+    fontWeight: 'bold',
   },
   card: {
     width: deviceWidth*.9,
-    height: deviceHeight*.75,
+    height: deviceHeight*.50,
     borderRadius: 50,
+    backgroundColor: '#e6e2da',
+  },
+  cardimage: {
+    marginTop: 50,
+    alignItems: 'center',
+    width: deviceWidth*.9,
+    height: deviceHeight*.20,
   },
   cardDescription: {
     padding: 15,
@@ -61,6 +103,7 @@ var styles = StyleSheet.create({
     flex: 1,
   },
   cardInfo: {
+    margin: 20,
     backgroundColor: '#fff',
     borderRadius: 10,
     padding: 10,

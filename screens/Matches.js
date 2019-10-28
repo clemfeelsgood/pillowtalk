@@ -36,11 +36,10 @@ class Matches extends React.Component {
       .doc(roomref);
     return room.get().then(doc => {
       if (doc.exists) {
-        userid1: "";
         users = doc.data();
         this.setState({
-          userid1: users.userid1,
-          userid2: users.userid2
+          userid1: users.user1,
+          userid2: users.user2
         });
       } else {
         console.log("No such document!");
@@ -73,12 +72,12 @@ class Matches extends React.Component {
         .get()
         .then(doc => {
           if (doc.exists) {
-            const { text, image, category } = doc.data();
+            const { Category, GIF, Text } = doc.data();
             boards.push({
               key: doc.id,
-              text,
-              image,
-              category
+              Text,
+              GIF,
+              Category
             });
           } else {
             console.log("No such document! 2");
@@ -127,12 +126,13 @@ class Matches extends React.Component {
     return (
       <View style={styles.container}>
         <ScrollView>
-          <Text> Match List </Text>
+          <Text style={[styles.h2, styles.center]}> Match List </Text>
           {this.state.boards.map(uri => {
             return (
               <View>
-                <Image style={styles.img} source={{ uri: uri.image }} />
-                <Text>{uri.text}</Text>
+                <ImageBackground style={styles.img} source={{ uri: uri.GIF }}>
+                <Text>{uri.Text}</Text>
+                </ImageBackground>
               </View>
             );
           })}

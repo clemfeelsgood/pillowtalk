@@ -6,12 +6,9 @@ export default reducers = (state = {
       id: '',
       name: '',
       email: '',
-      swipesyes: [],
-      swipesno: [],
       notification: false,
-      show: false,
-      report: false,
       token: ' ',
+      room:'',
     }
   }, action) => {
     switch (action.type) {
@@ -29,6 +26,9 @@ export default reducers = (state = {
       }
       case 'CREATE ROOM':      
         return { ...state, roomid: action.payload
+      }
+      case 'ALLOW_NOTIFICATIONS':      
+        return { ...state, user: { ...state.user, token : action.payload } 
       }
     }
     return state;

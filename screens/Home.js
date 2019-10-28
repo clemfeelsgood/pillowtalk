@@ -20,8 +20,12 @@ class Home extends React.Component {
   }
 
   componentWillMount() {
-    this.props.dispatch(getCards());
+    const timestamp = this.props.roomid[0].timestamp;
+    const cards = this.props.roomid[0].cards;
+    const day = this.props.roomid[0].day;
+    this.props.dispatch(getCards(timestamp,day,cards));
   }
+
 
   handleYup(card) {
     const userref = firebase.auth().currentUser;
@@ -32,6 +36,10 @@ class Home extends React.Component {
       .update({
         swipesyes: firebase.firestore.FieldValue.arrayUnion(card.id)
       });
+
+      //Check Match card: use usersinroom to get user2. Make sure that you are indeed taking the other user,
+    //get swipes yes from user2
+    //if card.id is in swipes yes return alert + notification
   }
 
   handleNope(card) {
@@ -52,8 +60,8 @@ class Home extends React.Component {
         stack={false}
         renderCard={cardData => <Cards {...cardData} />}
         renderNoMoreCards={() => <NoCards />}
-        showYup={false}
-        showNope={false}
+        showYup={true}
+        showNope={true}
         handleYup={this.handleYup}
         handleNope={this.handleNope}
         hasMaybeAction={false}

@@ -3,14 +3,18 @@ import Home from '../screens/Home';
 import Profile from '../screens/Profile';
 import Rooms from '../screens/Rooms';
 import Matches from '../screens/Matches';
+import styles from '../styles'
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 const TabNavigator = createBottomTabNavigator({
-    Rooms: {
+    Profile: {
       screen: Profile,
       navigationOptions: {
         tabBarLabel: 'Profile',
+        //tabBarIcon: ({focused}) => (
+          //<Image style={ styles.logo } source={require('../assets/profile-logo.png')}/>
+        //),
       },
     },
     Home: {
@@ -35,7 +39,7 @@ const TabNavigator = createBottomTabNavigator({
     swipeEnabled: false,
     tabBarOptions: {
       style: {
-        height: 40
+        height: 75
       },
     }
   }
