@@ -5,21 +5,25 @@ import {
   Text, 
   View,
   ImageBackground,
-  TouchableOpacity,
+  Image,
 } from 'react-native';
 
 class Cards extends React.Component {
-  //state = {
-    //num: 0
-  //}
-
+  
 
   render() {
     return (
+        <View style={styles.card}>
+        <Image style={styles.cardimage} source={{uri: this.props.GIF}}>
+          
+        </Image>
+        <View style={styles.cardDescription}>
             <View style={styles.cardInfo}>
-              <Text style={styles.bold}>{this.props.name}</Text>
-              <Text>{this.props.aboutMe}</Text>
+              <Text style={styles.bold}>{this.props.text}</Text>
             </View>
+        </View>
+        
+        </View>
     )
   }
 }

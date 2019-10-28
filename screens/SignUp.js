@@ -1,85 +1,107 @@
-import React from 'react'
-import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
-import * as firebase from 'firebase';
-import Rooms from './Rooms';
-import firebaseConfig from '../config/firebase.js';
-import 'firebase/firestore';
+import React from "react";
+import { StyleSheet, Text, TextInput, View } from "react-native";
+import * as firebase from "firebase";
+import Login from './Login';
+import firebaseConfig from "../config/firebase.js";
+import "firebase/firestore";
+import { login } from "../redux/actions";
+import { connect } from "react-redux";
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Input, Button } from 'react-native-elements';
 
-export default class SignUp extends React.Component {
-  state = { name:'', email: '', password: '', errorMessage: null }
 
-handleSignUp = () => {
+class SignUp extends React.Component {
+  state = { name: "", email: "", password: "", errorMessage: null };
+
+  handleSignUp = () => {
     firebase
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then(() => this.props.navigation.navigate('Rooms'))
-      .catch(error => this.setState({ errorMessage: error.message }))
+      .then(() => this.props.navigation.navigate("Rooms"))
+      .catch(error => this.setState({ errorMessage: error.message }));     
 
+      firebase.auth().onAuthStateChanged((user) => {
+      if (user != null) {
+        this.props.dispatch(login(user, this.state.name))
+      }
+    });
 
-var db = firebase.firestore();
-  const userRef = db.collection("users").add({
-    name: this.state.name,
-    email: this.state.email
-  });  
-  this.setState({
-    name: "",
-    email: ""
-  });  
-}
+  }; 
 
-  
-
-  
-render() {
+  render() {
     return (
       <View style={styles.container}>
-        <Text>Sign Up</Text>
-        {this.state.errorMessage && <Text style={{ color: 'red' }}> {this.state.errorMessage} </Text>}
-        
-        <TextInput
-          placeholder="Name"
+      
+        <Text style={styles.h2}>Please create an account</Text>
+        {this.state.errorMessage && (
+          <Text style={{ color: "red" }}> {this.state.errorMessage} </Text>
+        )}
+        <Input
+          placeholder='Name'
           autoCapitalize="none"
-          style={styles.textInput}
           onChangeText={name => this.setState({ name })}
           value={this.state.name}
-        />
-        <TextInput
-          placeholder="Email"
+        />  
+        <Input
+          placeholder='Email'
           autoCapitalize="none"
-          style={styles.textInput}
           onChangeText={email => this.setState({ email })}
           value={this.state.email}
-        />
-        <TextInput
-          secureTextEntry
-          placeholder="Password"
+        /> 
+        <Input
+
+          placeholder='Password'
           autoCapitalize="none"
-          style={styles.textInput}
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
-        />
-        <Button title="Sign Up" onPress={this.handleSignUp} />
-        <Button
+        /> 
+        <Text></Text>
+        <Button 
+        raised title="Sign Up" onPress={this.handleSignUp} icon={
+    <Icon
+      name="arrow-right"
+      size={15}
+      color="white"
+    />
+  }
+  />
+        <Button type="clear"
           title="Already have an account? Login"
-          onPress={() => this.props.navigation.navigate('Login')}
+          onPress={() => this.props.navigation.navigate("Login")}
         />
       </View>
-    )
+    );
+  }
+}
+
+function mapStateToProps(state) {
+  return {
+    loggedIn: state.loggedIn,
   };
 }
-  
+
+export default connect(mapStateToProps)(SignUp);
 
 const styles = StyleSheet.create({
+  h2: {
+    fontSize: 20,
+    marginTop: 30,
+    marginBottom: 30,
+    color: '#0637CC',
+  },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center"
   },
   textInput: {
     height: 40,
-    width: '90%',
-    borderColor: 'gray',
+    width: "90%",
+    padding: 15,
+    backgroundColor: '#fff',
+    margin: 5,
+    borderRadius: 3,
     borderWidth: 1,
-    marginTop: 8
+    borderColor: '#868686',
   }
-})
+});

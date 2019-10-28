@@ -1,12 +1,24 @@
 export default reducers = (state = {
     loggedIn: false,
-    cards: [],
+    inroom:false,
+    roomid: {
+      id:'',
+      name: '',
+      user1: '',
+      user2:'',
+      cards:[],
+      day: 1,
+      timestamp: '',
+    },
     user: {
-		  name: '',
-		  email: '',
-		  name: '',
-		  swipes: [],
-		  token: ' ',
+      id: '',
+      name: '',
+      email: '',
+      notification: false,
+      token: ' ',
+      room:'',
+      swipesyes:[],
+      swipesno:[],
     }
   }, action) => {
     switch (action.type) {
@@ -18,6 +30,15 @@ export default reducers = (state = {
       }
       case 'GET_CARDS':      
         return { ...state, cards: action.payload
+      }
+      case 'JOIN ROOM':      
+        return { ...state, roomid: action.payload, inroom: action.inroom
+      }
+      case 'CREATE ROOM':      
+        return { ...state, roomid: action.payload, inroom: action.inroom
+      }
+      case 'ALLOW_NOTIFICATIONS':      
+        return { ...state, user: { ...state.user, token : action.payload } 
       }
     }
     return state;

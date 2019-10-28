@@ -1,90 +1,82 @@
-import React from 'react';
-import styles from '../styles';
-import * as firebase from 'firebase';
-import { getCards } from '../redux/actions'
-import SwipeCards from 'react-native-swipe-cards'
-import { connect } from 'react-redux';
-//import Cards from '../components/Cards.js';
-import NoCards from '../components/NoCards.js';
+import React from "react";
+import styles from "../styles";
+import * as firebase from "firebase";
+import { getCards } from "../redux/actions";
+import SwipeCards from "react-native-swipe-cards";
+import { connect } from "react-redux";
+import Cards from "../components/Cards.js";
+import NoCards from "../components/NoCards.js";
 
-import { StyleSheet, Platform, Image, Text, View} from 'react-native';
+import { StyleSheet, Platform, Image, Text, View } from "react-native";
 
-
-class Description extends React.Component {
-
-render() {
-    return (
-              <Text>{this.props.text}</Text>
-            )  
-          }
-      }
-
-  
- 
 class Home extends React.Component {
-constructor(props) {
-  super();
-  this.ref = firebase.firestore().collection('cards');
-  this.state = {
-    Cards: [],
-    user: "clem"
-  };
+  constructor() {
+    super();
+    const userref = firebase.auth().currentUser;
+    this.state = {
+      userid: userref.uid
+    };
   }
 
-
-onCollectionUpdate = (querySnapshot) => {
-  const cards = [];
-  querySnapshot.forEach((doc) => {
-    const { text } = doc.data();
-    cards.push({
-      id: doc.id,
-      doc, // DocumentSnapshot
-      text
-    });
-  });
-  this.setState({
-    cards,
-    isLoading: false,
- });
-}
-  componentDidMount() {
-  this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
-}
-
-  handleYup (card) {
-    state = { userid: "gApoGfSZYbTPKnz8qFbp" ,};
-    firebase.firestore().collection('users').doc(state.userid).update({
-    swipesyes: firebase.firestore.FieldValue.arrayUnion(card.id)
-});
+  componentWillMount() {
+    const timestamp = this.props.roomid[0].timestamp;
+    const cards = this.props.roomid[0].cards;
+    const day = this.props.roomid[0].day;
+    const roomid = this.props.roomid[0].id;
+    this.props.dispatch(getCards(timestamp, day, cards, roomid))
   }
 
-  handleNope (card) {
-    firebase.firestore().collection('users').doc(state.userid).update({
-    swipesno: firebase.firestore.FieldValue.arrayUnion(card.id)
-});
+  handleYup(card) {
+    const userref = firebase.auth().currentUser;
+    const newyes = card.id
+    
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(userref.uid)
+      .update({
+        swipesyes: firebase.firestore.FieldValue.arrayUnion(card.id)
+      });
+
+    //Check Match card: use usersinroom to get user2. Make sure that you are indeed taking the other user,
+    //get swipes yes from user2
+    //if card.id is in swipes yes return alert + notification
   }
 
+  handleNope(card) {
+    const userref = firebase.auth().currentUser;
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(userref.uid)
+      .update({
+        swipesno: firebase.firestore.FieldValue.arrayUnion(card.id)
+      });
+  }
 
   render() {
     return (
       <SwipeCards
-        cards={this.state.cards}
+        cards={this.props.cards}
         stack={false}
-        renderCard={(cardData) => <Description {...cardData} />}
+        renderCard={cardData => <Cards {...cardData} />}
         renderNoMoreCards={() => <NoCards />}
-        showYup={false}
-        showNope={false}
-        handleYup={this.handleYup}
+        showYup={true}
+        showNope={true}
+        handleYup={this.handleYup.bind(this)}
         handleNope={this.handleNope}
-        hasMaybeAction={false}/>
-    )
+        hasMaybeAction={false}
+      />
+    );
   }
 }
 
 function mapStateToProps(state) {
   return {
-    loggedIn: state.loggedIn,
-    cards: state.cards
+    user: state.user,
+    roomid: state.roomid,
+    cards: state.cards,
+    inroom: state.inroom
   };
 }
 

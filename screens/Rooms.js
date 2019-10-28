@@ -1,98 +1,90 @@
-import React, { Component } from 'react';
-import * as firebase from 'firebase';
-import TabNavigator from '../navigation/TabNavigator'
+import React, { Component } from "react";
+import * as firebase from "firebase";
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
   Button,
-  Prompt
-} from 'react-native';
+  Prompt,
+  TouchableOpacity
+} from "react-native";
+import { connect } from "react-redux";
+import styles from "../styles";
+import { createRoom, joinRoom } from "../redux/actions";
+import { Input } from 'react-native-elements';
 
-export default class Rooms extends React.Component {
-  state = { roomname: '',user1:'', user2:'', errorMessage: null }
+class Rooms extends React.Component {
+  state = { roomname: "", user1: "", user2: "", errorMessage: null };
 
-createRoom = () => {
-var db = firebase.firestore();
+  createroom = () => {
+    this.props.dispatch(createRoom(this.state.newroom)).then(result => {
+      if (this.props.roomid.length > 0) {
+        //const timestamp = this.props.roomid[0].timestamp;
+        //const day = this.props.roomid[0].day;
+        //const cards = this.props.roomid[0].cards;
+        //this.props.dispatch(getCards(timestamp,day,cards))
+      }
+    });
+  };
 
- db.collection("room").add({
-    roomname: this.state.newroom,
-    user1: "clem",
-    user2: "",
-})
+  joinroom = () => {
+    this.props.dispatch(joinRoom(this.state.roomquery)).then(result => {
+      if (this.props.roomid.length > 0) {
+        this.props.navigation.navigate("App");
+      }
+    });
+  };
 
-.then(() => this.props.navigation.navigate('App'))
-
-.catch(function(error) {
-    console.error("Error writing document: ", error);
-});
-}
-
-
-joinRoom = () => {
-var db = firebase.firestore();
-var query = db.collection("room").where("roomname", "==", this.state.roomquery)
-
-query.get()
-    .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-    // doc.data() is never undefined for query doc snapshots
-            
-            db.collection("room").doc(doc.id).update({
-              user2: "charlotte"
-            }); 
-
-            //console.log(doc.id, " => ", doc.data());  
-        });
-    })
-    .catch(function(error) {
-        console.log("Error getting documents: ", error);
-    })
-
-.then(() => this.props.navigation.navigate('App'))
-}
-
-render() {
+  render() {
     return (
-      <View style={styles.container}>
-        <Text>Room</Text>
-        {this.state.errorMessage && <Text style={{ color: 'red' }}> {this.state.errorMessage} </Text>}
-        <TextInput
+      <View style={[styles.container, styles.center]}>
+        <Text style={styles.h2}>Connecting you with your partner</Text>
+        <Text style={styles.h3}>If your partner already joined and created a room, use the name he created, otherwise pick a name and share it with your partner</Text>
+        {this.state.errorMessage && (
+          <Text style={{ color: "red" }}> {this.state.errorMessage} </Text>
+        )}
+        
+        <Input
+          placeholder="Name of the room you want to join?"
+          autoCapitalize="none"
+          style={styles.textInput}
+          onChangeText={roomquery => this.setState({ roomquery })}
+          value={this.state.roomquery}
+        /> 
+
+        <TouchableOpacity onPress={this.joinroom}>
+        <Text style={styles.button}> Join Room </Text>
+        </TouchableOpacity>
+
+        <Input
           placeholder="Choose your room name"
           autoCapitalize="none"
           style={styles.textInput}
           onChangeText={newroom => this.setState({ newroom })}
           value={this.state.newroom}
         />
-        <Button title="Create Room" onPress={this.createRoom} />
-
-        <TextInput
-          placeholder="What's the room name?"
-          autoCapitalize="none"
-          style={styles.textInput}
-          onChangeText={roomquery => this.setState({ roomquery })}
-          value={this.state.roomquery}
-        />
         
-        <Button title="Join Room" onPress={this.joinRoom} />
-      
+        <TouchableOpacity onPress={this.createroom}>
+        <Text style={styles.button}> Create Room </Text>
+        </TouchableOpacity>
+        
+        
+        
+        
       </View>
-    )
+    );
+  }
+}
+//
+
+function mapStateToProps(state) {
+  return {
+    user: state.user,
+    roomid: state.roomid
   };
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  textInput: {
-    height: 40,
-    width: '90%',
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginTop: 8
-  }
-})
+export default connect(mapStateToProps)(Rooms);
+
+
