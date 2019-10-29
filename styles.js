@@ -36,6 +36,12 @@ var styles = StyleSheet.create({
   nav: {
     marginTop: 70
   },
+  MatchD: {
+    justifyContent: 'center',
+    textAlign: 'center',
+    color: '#868686',
+    fontSize: 15,
+  },
   center: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -48,7 +54,6 @@ var styles = StyleSheet.create({
     margin: 10,
     backgroundColor: '#fff',
   },
-
   imgRow: {
     flexWrap: 'wrap',
     flexDirection: 'row',

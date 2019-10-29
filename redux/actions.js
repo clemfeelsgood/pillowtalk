@@ -61,7 +61,7 @@ export function createRoom(roomname) {
 			.then(function(querySnapshot) {
 				if (querySnapshot.empty) {
 					var newRoomRef = db.collection("room").doc();
-					const createdat = firebase.firestore.FieldValue.serverTimestamp();
+					const createdat = firebase.firestore.Timestamp.fromDate(new Date())
 					newRoomRef.set({
 						roomname: roomname,
 						user1: userref.uid,
@@ -70,7 +70,7 @@ export function createRoom(roomname) {
 						day: 1,
 						timestamp: createdat
 					});
-					return newRoomRef.get().then(function(doc) {
+					newRoomRef.get().then(function(doc) {
 						if (doc.exists) {
 							const roomv = doc.data();
 							room.push({
@@ -163,8 +163,9 @@ export function leaveroom() {
 export function getCards(timestamp, day, cards, roomid) {
 	return function(dispatch) {
 		const now = new Date();
+		const lastdate = timestamp.toDate()
 		var Difference_In_Days =
-			(now.getTime() - timestamp.getTime()) / (1000 * 3600 * 24);
+			(now.getTime() - lastdate.getTime()) / (1000 * 3600 * 24);
 		const userref = firebase.auth().currentUser;
 		const newcards = cards;
 		const room = roomid;
@@ -195,7 +196,8 @@ export function getCards(timestamp, day, cards, roomid) {
 							.doc(roomid)
 							.update({
 								cards: newcards,
-								day: newday
+								day: newday,
+								timestamp: firebase.firestore.Timestamp.fromDate(new Date())
 							});
 					}
 				});

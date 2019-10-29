@@ -9,8 +9,9 @@ import {
   TouchableOpacity,
   Image,
   View,
-  ListItem
+  ImageBackground
 } from "react-native";
+import { ListItem } from "react-native-elements";
 
 class Matches extends React.Component {
   constructor() {
@@ -90,7 +91,6 @@ class Matches extends React.Component {
         boards
       })
     );
-    console.log(cardsmapPromises);
   };
 
   intersect = (a, b) => {
@@ -125,17 +125,16 @@ class Matches extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+        <Text style={[styles.h2, styles.center]}> Match List </Text>
         <ScrollView>
-          <Text style={[styles.h2, styles.center]}> Match List </Text>
-          {this.state.boards.map(uri => {
-            return (
-              <View>
-                <ImageBackground style={styles.img} source={{ uri: uri.GIF }}>
-                <Text>{uri.Text}</Text>
-                </ImageBackground>
-              </View>
-            );
-          })}
+          {this.state.boards.map((l, i) => (
+            <ListItem
+              key={i}
+              leftAvatar={{ source: { uri: l.GIF } }}
+              title={l.Text}
+              bottomDivider
+            />
+          ))}
         </ScrollView>
       </View>
     );

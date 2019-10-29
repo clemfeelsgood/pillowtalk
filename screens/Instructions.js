@@ -9,7 +9,7 @@ import {
   TouchableOpacity
 } from "react-native";
 import styles from "../styles";
-import Rooms from "./Rooms";
+import TabNavigator from '../navigation/TabNavigator'
 import { connect } from "react-redux";
 
 class Instructions extends React.Component {
@@ -20,13 +20,12 @@ class Instructions extends React.Component {
   }
 
   render() {
-    if (this.props.inroom) {
+    //if (this.props.inroom) {
       // aussi un probleme ici pour passer directment si l'utilisateur a deja une room
-      console.log("in instructions",this.props.inroom)
-      return(
-        <Text>Dead-end</Text>)
-    } 
-    else {
+      //return(
+        //<TabNavigator/>)
+    //} 
+    //else {
       return (
         <View style={[styles.container, styles.center]}>
           <Text style={styles.h2}>Welcome to the beta of Common Ground</Text>
@@ -50,7 +49,7 @@ class Instructions extends React.Component {
       );
     }
   }
-}
+//}
 
 function mapStateToProps(state) {
   return {
