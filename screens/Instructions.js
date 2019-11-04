@@ -9,23 +9,22 @@ import {
   TouchableOpacity
 } from "react-native";
 import styles from "../styles";
-import TabNavigator from '../navigation/TabNavigator'
+import Home from './Home'
 import { connect } from "react-redux";
 
 class Instructions extends React.Component {
   state = {};
 
-  componentWillMount() {
-    
+  componentWillMount() {   
   }
 
   render() {
-    //if (this.props.inroom) {
-      // aussi un probleme ici pour passer directment si l'utilisateur a deja une room
-      //return(
-        //<TabNavigator/>)
-    //} 
-    //else {
+    if (this.props.inroom) {
+      return this.props.navigation.navigate("App");
+      console.log("i'm here", this.props.inroom);
+      console.log("i'm here", this.props.loggedIn)
+      }
+      else { 
       return (
         <View style={[styles.container, styles.center]}>
           <Text style={styles.h2}>Welcome to the beta of Common Ground</Text>
@@ -49,12 +48,13 @@ class Instructions extends React.Component {
       );
     }
   }
-//}
+}
 
 function mapStateToProps(state) {
   return {
     user: state.user,
-    inroom: state.inroom
+    inroom: state.inroom,
+    roomid: state.roomid,
   };
 }
 

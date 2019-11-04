@@ -16,7 +16,23 @@ var styles = StyleSheet.create({
   logo: {
     width: deviceWidth*0.9,
     padding: 30
-
+  },
+  homecard:{
+    marginTop: 50,
+  },
+  yupStyle:{
+    marginTop:50,
+  },
+  homebutton:{
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: '#051033',
+    textAlign: 'center',
+    color: '#051033',
+    padding: 8,
+    fontSize: 15,
+    fontWeight: 'bold',
+    margin: 15,
   },
   h1: {
 
@@ -94,6 +110,7 @@ var styles = StyleSheet.create({
     width: deviceWidth*.9,
     height: deviceHeight*.50,
     borderRadius: 50,
+    marginTop:50,
     backgroundColor: '#e6e2da',
   },
   cardimage: {

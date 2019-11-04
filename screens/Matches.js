@@ -103,18 +103,13 @@ class Matches extends React.Component {
 
   componentWillMount() {
     this.usersinroom(this.props.roomid[0].id).then(result => {
-      console.log(this.state.userid1);
-      console.log(this.state.userid2);
       this.swipesyes(this.state.userid1).then(result2 => {
         const swipes1 = this.state.swipes;
-        console.log(swipes1);
         this.setState({ swipes1: swipes1 });
         this.swipesyes(this.state.userid2).then(result3 => {
           const swipes2 = this.state.swipes;
           this.setState({ swipes2: swipes2 });
-          console.log(swipes2);
           const swipes = this.intersect(swipes1, swipes2);
-          console.log("swipes", swipes);
           this.setState({ swipes: swipes });
           return this.cardsdetails(swipes);
         });

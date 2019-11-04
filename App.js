@@ -3,6 +3,7 @@ import styles from './styles.js'
 import Login from './screens/Login';
 import { Text, View, YellowBox } from 'react-native';
 import * as Font from 'expo-font';
+import RootNavigator from './navigation/RootNavigator'
 
 import reducers from './redux/reducers';
 import thunkMiddleware from 'redux-thunk';
@@ -24,7 +25,7 @@ componentDidMount() {
   render() {
     return (
       <Provider store={store}>
-        <Login/>
+        <RootNavigator/>
       </Provider>
     );
   }

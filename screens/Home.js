@@ -17,8 +17,6 @@ class Home extends React.Component {
     const userref = firebase.auth().currentUser;
     this.state = {
       userid: userref.uid,
-      visible:false,
-      suggest:''
     };
   }
 
@@ -51,59 +49,23 @@ class Home extends React.Component {
   })
   }
 
-  addcard(suggest) {
-  const userref = firebase.auth().currentUser;
-  let suggestiondoc = firebase.firestore().collection("suggestions").doc().set({
-    user: userref.uid,
-    text: suggest});
-  this.setState({ visible: false })
-  }
 
   render() {
     return (
-      <View>
       <SwipeCards
         cards={this.props.cards}
         stack={false}
         renderCard={cardData => <Cards {...cardData} />}
         renderNoMoreCards={() => <NoCards />}
-        showYup={true}
+        showYup={false}
         showNope={false}
         handleYup={this.handleYup}
         handleNope={this.handleNope}
+        yupStyle = {styles.yupStyle}
+        yupText = {"I'm in"}
+        nopeText = {"Nope"}
         hasMaybeAction={false}
-      />
-    
-    <Button
-        style={styles.button}
-          title="Suggest Card"
-          onPress={() => this.setState({ visible: true })}
-    />
-
-     {this.state.visible && (
-    <Overlay isVisible>
-      <Text>Just add your text below, we'll review and add later!</Text>
-      <Input
-          secureTextEntry
-          autoCapitalize="none"
-          placeholder="Text for the card"
-          onChangeText={suggest => this.setState({ suggest })}
-          value={this.state.suggest}
-        />
-      <Button
-        style={styles.button}
-          title="Send"
-          onPress={() => this.addcard(this.state.suggest)}
-    />   
-      <Button
-        style={styles.button}
-          title="Close"
-          onPress={() => this.setState({ visible: false })}
-    />
-    </Overlay>
-    )
-    }
-    </View>
+      />  
     );
   }
 }

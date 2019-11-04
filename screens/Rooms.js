@@ -65,20 +65,18 @@ class Rooms extends React.Component {
         <TouchableOpacity onPress={this.createroom}>
         <Text style={styles.button}> Create Room </Text>
         </TouchableOpacity>
-        
-        
-        
-        
       </View>
     );
-  }
+  
+}
 }
 //
 
 function mapStateToProps(state) {
   return {
     user: state.user,
-    roomid: state.roomid
+    roomid: state.roomid,
+    inroom: state.inroom,
   };
 }
 

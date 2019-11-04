@@ -9,6 +9,8 @@ import TabNavigator from './TabNavigator.js';
 import Instructions from '../screens/Instructions'
 import Rooms from '../screens/Rooms'
 import Home from '../screens/Home'
+import SignUp from '../screens/SignUp'
+import Login from '../screens/Login'
 
 
 
@@ -28,17 +30,22 @@ const OnboardingStack = createStackNavigator(
   },
 );
 
-
+const AuthStack = createStackNavigator(
+  {
+    Login : Login,
+    SignUp: SignUp,
+  },
+);
 
 
 const RootStackNavigator = createAppContainer(createSwitchNavigator(
   {
     Onboarding: OnboardingStack,
     App: AppStack,
-
+    Auth: AuthStack,
   },
   {
-    initialRouteName: 'Onboarding',
+    initialRouteName: 'Auth',
   }
 ));
 
