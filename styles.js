@@ -46,6 +46,7 @@ var styles = StyleSheet.create({
     marginTop: 30,
     marginBottom: 30,
     color: '#0637CC',
+    textAlign: 'center'
   },
   h3: {
     fontSize: 15,

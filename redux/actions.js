@@ -171,7 +171,6 @@ export function retrieveRoom(roomname) {
 			} else {
 				console.log("No such room!");
 			}
-			console.log("in action working")
 			dispatch({
 					type: "RETRIEVE ROOM",
 					payload: room,

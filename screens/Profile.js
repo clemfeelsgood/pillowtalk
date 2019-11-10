@@ -1,29 +1,22 @@
 import React from "react";
 import styles from "../styles";
 import { connect } from "react-redux";
-import { logout } from "../redux/actions";
+import { logout, addsuggest } from "../redux/actions";
 import { Input } from 'react-native-elements';
 import { Text, View, TouchableOpacity } from "react-native";
 import * as firebase from "firebase";
 
 class Profile extends React.Component {
   state = {
-    suggest: ""
+    suggestion: ""
   };
 
   componentWillMount() {}
 
-  addsuggest(suggest,type) {
-    const userref = firebase.auth().currentUser;
-    let suggestiondoc = firebase.firestore()
-      .collection("suggestions")
-      .doc()
-      .set({
-        user: userref.uid,
-        text: suggest,
-        category: type,
-      });
-  }
+addsuggestion = ()  => {
+  this.props.dispatch(addsuggest(this.state.suggestion,"suggestion"));
+}
+
 
 
   render() {
@@ -31,9 +24,7 @@ class Profile extends React.Component {
       <View style={[styles.container, styles.center]}>
         <Text style={styles.h3}>If you wish your partner to join you, just give them the following room name:</Text>
         <Text style={styles.h2}>{this.props.roomid[0].roomname}</Text>
-        <TouchableOpacity onPress={() => this.props.dispatch(logout())}>
-          <Text style={styles.button}>Logout</Text>
-        </TouchableOpacity>
+    
         
         <Input
           placeholder="Anything suggestion for us?"
@@ -43,8 +34,12 @@ class Profile extends React.Component {
           value={this.state.suggestion}
         /> 
 
-        <TouchableOpacity onPress={this.addsuggest(this.state.suggestion,"suggestion")}>
+        <TouchableOpacity onPress={this.addsuggestion}>
         <Text style={styles.button}> Send us your feedback </Text>
+        </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => this.props.dispatch(logout())}>
+          <Text style={styles.button}>Logout</Text>
         </TouchableOpacity>
 
       </View>

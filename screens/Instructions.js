@@ -18,9 +18,7 @@ class Instructions extends React.Component {
 
   componentWillMount() {
     if (this.props.user.room != "") {
-      this.props.dispatch(retrieveRoom(this.props.user.room)).then(resp => 
-      console.log("in component", this.props.roomid)
-      )
+      this.props.dispatch(retrieveRoom(this.props.user.room))
     }
   }
 

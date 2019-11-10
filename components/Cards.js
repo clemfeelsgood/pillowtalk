@@ -1,8 +1,17 @@
 import React from "react";
 import styles from "../styles";
 import { Overlay, Input } from "react-native-elements";
-import { Text, View, ImageBackground, Image, Button } from "react-native";
+import {
+  Text,
+  View,
+  ImageBackground,
+  Image,
+  Button,
+  TouchableOpacity
+} from "react-native";
 import { addsuggest } from "../redux/actions";
+import { connect } from "react-redux";
+import { withNavigation } from "react-navigation";
 
 class Cards extends React.Component {
   state = {
@@ -10,19 +19,10 @@ class Cards extends React.Component {
     suggest: ""
   };
 
-  addsuggest(suggest, type) {
-    const userref = firebase.auth().currentUser;
-    let suggestiondoc = firebase
-      .firestore()
-      .collection("suggestions")
-      .doc()
-      .set({
-        user: userref.uid,
-        text: suggest,
-        category: type
-      });
+  addsuggestcard = () => {
     this.setState({ visible: false });
-  }
+    this.props.dispatch(addsuggest(this.state.suggest, "card"));
+  };
 
   render() {
     return (
@@ -39,16 +39,14 @@ class Cards extends React.Component {
           </View>
         </View>
         <View style={styles.fixToText}>
-          <Button
-            style={styles.homebutton}
-            title="Matches"
-            onPress={() => this.props.navigation.push('Matches')}
-          />
-          <Button
-            style={styles.homebutton}
-            title="Suggest Card"
-            onPress={() => this.setState({ isVisible: true })}
-          />
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate("Matches")}
+          >
+            <Text style={styles.button}> Matches </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.setState({ isVisible: true })}>
+            <Text style={styles.button}> Suggest Card </Text>
+          </TouchableOpacity>
         </View>
 
         <Overlay
@@ -68,7 +66,7 @@ class Cards extends React.Component {
             <Button
               style={styles.button}
               title="Send"
-              onPress={() => this.props.dispatch(addsuggest(this.state.suggest, "card")) && this.setState({ visible: false })}
+              onPress={this.addsuggestcard}
             />
           </View>
         </Overlay>
@@ -77,4 +75,4 @@ class Cards extends React.Component {
   }
 }
 
-export default Cards;
+export default withNavigation(Cards);

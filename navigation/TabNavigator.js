@@ -23,7 +23,7 @@ const TabNavigator = createBottomTabNavigator({
         tabBarLabel: 'Common',
       }
     },
-    Matches: {
+    Forme: {
       screen: Forme,
       navigationOptions: {
         tabBarLabel: 'For Me',
