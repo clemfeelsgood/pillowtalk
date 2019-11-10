@@ -9,6 +9,7 @@ export default reducers = (state = {
       cards:[],
       day: 1,
       timestamp: '',
+      lastpull: '',
     },
     user: {
       id: '',
@@ -37,8 +38,14 @@ export default reducers = (state = {
       case 'CREATE ROOM':      
         return { ...state, roomid: action.payload, inroom: action.inroom
       }
+      case 'RETRIEVE ROOM':      
+        return { ...state, roomid: action.payload, inroom: action.inroom
+      }
       case 'ALLOW_NOTIFICATIONS':      
         return { ...state, user: { ...state.user, token : action.payload } 
+      }
+      case 'ADDSUGGEST':      
+        return { ...state
       }
     }
     return state;

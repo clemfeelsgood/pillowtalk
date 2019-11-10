@@ -41,7 +41,6 @@ class Login extends React.Component {
 
   render() {
     if(this.props.loggedIn){
-      console.log(this.props.loggedIn)
       return (
         this.props.navigation.navigate("Instructions")
       )

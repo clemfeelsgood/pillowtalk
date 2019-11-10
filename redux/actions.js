@@ -61,7 +61,9 @@ export function createRoom(roomname) {
 			.then(function(querySnapshot) {
 				if (querySnapshot.empty) {
 					var newRoomRef = db.collection("room").doc();
-					const createdat = firebase.firestore.Timestamp.fromDate(new Date())
+					const createdat = firebase.firestore.Timestamp.fromDate(
+						new Date()
+					);
 					newRoomRef.set({
 						roomname: roomname,
 						user1: userref.uid,
@@ -146,6 +148,54 @@ export function joinRoom(roomname) {
 	};
 }
 
+export function retrieveRoom(roomname) {
+	return function(dispatch) {
+		const room = [];
+		const thisroom = firebase
+			.firestore()
+			.collection("room")
+			.doc(roomname);
+		return thisroom.get().then(doc => {
+			if (doc.exists) {
+				const roomv = doc.data();
+				room.push({
+					id: doc.id,
+					roomname: roomv.roomname,
+					user1: roomv.user1,
+					user2: roomv.user2,
+					cards: roomv.cards,
+					day: roomv.day,
+					timestamp: roomv.timestamp,
+					lastpull: roomv.lastpull
+				});
+			} else {
+				console.log("No such room!");
+			}
+			console.log("in action working")
+			dispatch({
+					type: "RETRIEVE ROOM",
+					payload: room,
+					inroom: true
+				});
+		});
+	};
+}
+
+export function addsuggest(suggest,type) {
+	return function (dispatch) {
+    const userref = firebase.auth().currentUser;
+    let suggestiondoc = firebase.firestore()
+      .collection("suggestions")
+      .doc()
+      .set({
+        user: userref.uid,
+        text: suggest,
+        category: type,
+      });
+      dispatch({ type: "ADDSUGGEST"});
+  };
+  }
+
 export function logout() {
 	return function(dispatch) {
 		firebase.auth().signOut();
@@ -163,7 +213,7 @@ export function leaveroom() {
 export function getCards(timestamp, day, cards, roomid) {
 	return function(dispatch) {
 		const now = new Date();
-		const lastdate = timestamp.toDate()
+		const lastdate = timestamp.toDate();
 		var Difference_In_Days =
 			(now.getTime() - lastdate.getTime()) / (1000 * 3600 * 24);
 		const userref = firebase.auth().currentUser;
@@ -197,7 +247,9 @@ export function getCards(timestamp, day, cards, roomid) {
 							.update({
 								cards: newcards,
 								day: newday,
-								timestamp: firebase.firestore.Timestamp.fromDate(new Date())
+								timestamp: firebase.firestore.Timestamp.fromDate(
+									new Date()
+								)
 							});
 					}
 				});
@@ -226,15 +278,14 @@ export function getCards(timestamp, day, cards, roomid) {
 								.collection("room")
 								.doc(roomid)
 								.update({
-									cards: newcards,
+									cards: newcards
 								});
 						}
 					});
+			} else {
+				console.log("return already in use cards");
+				dispatch({ type: "GET_CARDS", payload: newcards });
 			}
-		else{
-			console.log("return already in use cards");
-			dispatch({ type: "GET_CARDS", payload: newcards });
-			}	
 		}
 	};
 }

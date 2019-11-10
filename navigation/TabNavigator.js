@@ -2,7 +2,7 @@ import React from 'react';
 import Home from '../screens/Home';
 import Profile from '../screens/Profile';
 import Rooms from '../screens/Rooms';
-import Matches from '../screens/Matches';
+import Forme from '../screens/Forme';
 import styles from '../styles'
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
@@ -20,13 +20,13 @@ const TabNavigator = createBottomTabNavigator({
     Home: {
       screen: Home,
       navigationOptions: {
-        tabBarLabel: 'Home',
+        tabBarLabel: 'Common',
       }
     },
     Matches: {
-      screen: Matches,
+      screen: Forme,
       navigationOptions: {
-        tabBarLabel: 'Matches',
+        tabBarLabel: 'For Me',
       },
     },
   },
@@ -36,7 +36,7 @@ const TabNavigator = createBottomTabNavigator({
     },
     initialRouteName: 'Home',
     animationEnabled: true,
-    swipeEnabled: false,
+    swipeEnabled: true,
     tabBarOptions: {
       style: {
         height: 75

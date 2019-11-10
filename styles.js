@@ -23,6 +23,10 @@ var styles = StyleSheet.create({
   yupStyle:{
     marginTop:50,
   },
+  fixToText: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   homebutton:{
     borderRadius: 15,
     borderWidth: 1,

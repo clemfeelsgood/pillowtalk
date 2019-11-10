@@ -11,6 +11,7 @@ import Rooms from '../screens/Rooms'
 import Home from '../screens/Home'
 import SignUp from '../screens/SignUp'
 import Login from '../screens/Login'
+import Matches from '../screens/Matches'
 
 
 
@@ -19,6 +20,7 @@ const AppStack = createStackNavigator(
     Main: {
       screen: TabNavigator,
     },
+    Matches: Matches
   }
 );
 

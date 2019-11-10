@@ -2,6 +2,7 @@ import React from "react";
 import styles from "../styles";
 import { Overlay, Input } from "react-native-elements";
 import { Text, View, ImageBackground, Image, Button } from "react-native";
+import { addsuggest } from "../redux/actions";
 
 class Cards extends React.Component {
   state = {
@@ -9,7 +10,7 @@ class Cards extends React.Component {
     suggest: ""
   };
 
-  addcard(suggest) {
+  addsuggest(suggest, type) {
     const userref = firebase.auth().currentUser;
     let suggestiondoc = firebase
       .firestore()
@@ -17,7 +18,8 @@ class Cards extends React.Component {
       .doc()
       .set({
         user: userref.uid,
-        text: suggest
+        text: suggest,
+        category: type
       });
     this.setState({ visible: false });
   }
@@ -36,14 +38,19 @@ class Cards extends React.Component {
             </View>
           </View>
         </View>
-        <View style={styles.homebutton}>
+        <View style={styles.fixToText}>
           <Button
-            style={styles.button}
+            style={styles.homebutton}
+            title="Matches"
+            onPress={() => this.props.navigation.push('Matches')}
+          />
+          <Button
+            style={styles.homebutton}
             title="Suggest Card"
             onPress={() => this.setState({ isVisible: true })}
           />
         </View>
-     
+
         <Overlay
           isVisible={this.state.isVisible}
           onBackdropPress={() => this.setState({ isVisible: false })}
@@ -53,7 +60,6 @@ class Cards extends React.Component {
           <View>
             <Text>Just add your text below, we'll review and add later!</Text>
             <Input
-              secureTextEntry
               autoCapitalize="none"
               placeholder="Text for the card"
               onChangeText={suggest => this.setState({ suggest })}
@@ -62,13 +68,11 @@ class Cards extends React.Component {
             <Button
               style={styles.button}
               title="Send"
-              onPress={() => this.addcard(this.state.suggest)}
+              onPress={() => this.props.dispatch(addsuggest(this.state.suggest, "card")) && this.setState({ visible: false })}
             />
           </View>
         </Overlay>
-       </View> 
-        
-
+      </View>
     );
   }
 }

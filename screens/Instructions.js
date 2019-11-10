@@ -9,22 +9,23 @@ import {
   TouchableOpacity
 } from "react-native";
 import styles from "../styles";
-import Home from './Home'
+import Home from "./Home";
 import { connect } from "react-redux";
+import { retrieveRoom } from "../redux/actions";
 
 class Instructions extends React.Component {
   state = {};
 
-  componentWillMount() {   
+  componentWillMount() {
+    if (this.props.user.room != "") {
+      this.props.dispatch(retrieveRoom(this.props.user.room)).then(resp => 
+      console.log("in component", this.props.roomid)
+      )
+    }
   }
 
   render() {
-    if (this.props.inroom) {
-      return this.props.navigation.navigate("App");
-      console.log("i'm here", this.props.inroom);
-      console.log("i'm here", this.props.loggedIn)
-      }
-      else { 
+    if (this.props.user.room == "") {
       return (
         <View style={[styles.container, styles.center]}>
           <Text style={styles.h2}>Welcome to the beta of Common Ground</Text>
@@ -44,8 +45,19 @@ class Instructions extends React.Component {
           >
             <Text style={styles.button}>Next</Text>
           </TouchableOpacity>
-        </View>
+        //</View>
       );
+    } else {
+      if(this.props.inroom) {
+      return (this.props.navigation.navigate("App"));
+    }
+    else{
+      return (
+        <View style={[styles.container, styles.center]}>
+        <Text style={styles.h2}>Loading Room</Text>
+        </View>
+        )
+    }
     }
   }
 }
@@ -53,8 +65,7 @@ class Instructions extends React.Component {
 function mapStateToProps(state) {
   return {
     user: state.user,
-    inroom: state.inroom,
-    roomid: state.roomid,
+    inroom: state.inroom
   };
 }
 

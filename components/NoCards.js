@@ -9,12 +9,18 @@ state = {
     suggest:'',
   }
 
-addcard(suggest) {
-  const userref = firebase.auth().currentUser;
-  let suggestiondoc = firebase.firestore().collection("suggestions").doc().set({
-    user: userref.uid,
-    text: suggest});
-  this.setState({ visible: false })
+addsuggest(suggest,type) {
+    const userref = firebase.auth().currentUser;
+    let suggestiondoc = firebase
+      .firestore()
+      .collection("suggestions")
+      .doc()
+      .set({
+        user: userref.uid,
+        text: suggest,
+        category: type,
+      });
+    this.setState({ visible: false });
   }
 
 
@@ -44,7 +50,7 @@ addcard(suggest) {
 						<Button
 							style={styles.button}
 							title="Send"
-							onPress={() => this.addcard(this.state.suggest)}
+							onPress={() => this.addcard(this.state.suggest,"card")}
 						/>
 					</View>
 				</Overlay>
