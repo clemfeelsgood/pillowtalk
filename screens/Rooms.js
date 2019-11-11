@@ -19,10 +19,8 @@ class Rooms extends React.Component {
 
   createroom = () => {
     this.props.dispatch(createRoom(this.state.newroom)).then(result => {
-      if (this.props.roomid.length > 0) {
-        this.props.navigation.navigate("App");
-      }
-    });
+    this.props.navigation.navigate("App");
+  });
   };
 
   joinroom = () => {

@@ -9,7 +9,6 @@ export default reducers = (state = {
       cards:[],
       day: 1,
       timestamp: '',
-      lastpull: '',
     },
     user: {
       id: '',

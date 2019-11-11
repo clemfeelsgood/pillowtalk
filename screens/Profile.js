@@ -17,15 +17,11 @@ addsuggestion = ()  => {
   this.props.dispatch(addsuggest(this.state.suggestion,"suggestion"));
 }
 
-
-
   render() {
     return (
       <View style={[styles.container, styles.center]}>
         <Text style={styles.h3}>If you wish your partner to join you, just give them the following room name:</Text>
         <Text style={styles.h2}>{this.props.roomid[0].roomname}</Text>
-    
-        
         <Input
           placeholder="Anything suggestion for us?"
           autoCapitalize="none"
@@ -37,11 +33,9 @@ addsuggestion = ()  => {
         <TouchableOpacity onPress={this.addsuggestion}>
         <Text style={styles.button}> Send us your feedback </Text>
         </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => this.props.dispatch(logout())}>
+        <TouchableOpacity onPress={() => this.props.dispatch(logout())}>
           <Text style={styles.button}>Logout</Text>
         </TouchableOpacity>
-
       </View>
     );
   }

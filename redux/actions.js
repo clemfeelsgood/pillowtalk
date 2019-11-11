@@ -56,7 +56,7 @@ export function createRoom(roomname) {
 		const userref = firebase.auth().currentUser;
 		var query = db.collection("room").where("roomname", "==", roomname);
 		const room = [];
-		return query
+		query
 			.get()
 			.then(function(querySnapshot) {
 				if (querySnapshot.empty) {
@@ -64,35 +64,68 @@ export function createRoom(roomname) {
 					const createdat = firebase.firestore.Timestamp.fromDate(
 						new Date()
 					);
-					newRoomRef.set({
-						roomname: roomname,
-						user1: userref.uid,
-						user2: "",
-						cards: [],
-						day: 1,
-						timestamp: createdat
-					});
-					newRoomRef.get().then(function(doc) {
-						if (doc.exists) {
-							const roomv = doc.data();
-							room.push({
-								id: doc.id,
+					const cardsday1 = [];
+					return firebase
+						.firestore()
+						.collection("cards")
+						.where("Day", "==", 1)
+						.get()
+						.then(function(querySnapshot) {
+							if (querySnapshot.empty) {
+								Alert.alert("No cards for Day 1");
+							} else {
+								querySnapshot.forEach(function(doc) {
+									const card = doc.data();
+									const text = card.Text;
+									const GIF = card.GIF;
+									cardsday1.push({
+										id: doc.id,
+										text,
+										GIF
+									});
+								});
+							}
+						})
+						.then(result => {
+							newRoomRef.set({
 								roomname: roomname,
-								user1: roomv.user1,
-								user2: roomv.user2,
-								cards: roomv.cards,
-								day: roomv.day,
-								timestamp: roomv.timestamp
+								user1: userref.uid,
+								user2: "",
+								cards: cardsday1,
+								day: 1,
+								timestamp: createdat
 							});
-						} else {
-							console.log("cannot find document just created");
-						}
-						dispatch({
-							type: "CREATE ROOM",
-							payload: room,
-							inroom: true
+							newRoomRef.get().then(function(doc) {
+								if (doc.exists) {
+									const roomv = doc.data();
+									room.push({
+										id: doc.id,
+										roomname: roomname,
+										user1: roomv.user1,
+										user2: roomv.user2,
+										cards: roomv.cards,
+										day: roomv.day,
+										timestamp: roomv.timestamp
+									});
+									firebase
+										.firestore()
+										.collection("users")
+										.doc(userref.uid)
+										.update({
+											room: doc.id
+										});
+								} else {
+									console.log(
+										"cannot find document just created"
+									);
+								}
+								return dispatch({
+									type: "CREATE ROOM",
+									payload: room,
+									inroom: true
+								});
+							});
 						});
-					});
 				} else {
 					Alert.alert(
 						"Room already exists, please pick another name"
@@ -172,33 +205,38 @@ export function retrieveRoom(roomname) {
 				console.log("No such room!");
 			}
 			dispatch({
-					type: "RETRIEVE ROOM",
-					payload: room,
-					inroom: true
-				});
+				type: "RETRIEVE ROOM",
+				payload: room,
+				inroom: true
+			});
 		});
 	};
 }
 
-export function addsuggest(suggest,type) {
-	return function (dispatch) {
-    const userref = firebase.auth().currentUser;
-    let suggestiondoc = firebase.firestore()
-      .collection("suggestions")
-      .doc()
-      .set({
-        user: userref.uid,
-        text: suggest,
-        category: type,
-      });
-      dispatch({ type: "ADDSUGGEST"});
-  };
-  }
+export function addsuggest(suggest, type) {
+	return function(dispatch) {
+		const userref = firebase.auth().currentUser;
+		let suggestiondoc = firebase
+			.firestore()
+			.collection("suggestions")
+			.doc()
+			.set({
+				user: userref.uid,
+				text: suggest,
+				category: type
+			});
+		dispatch({ type: "ADDSUGGEST" });
+	};
+}
 
 export function logout() {
 	return function(dispatch) {
-		firebase.auth().signOut();
-		dispatch({ type: "LOGOUT", loggedIn: false });
+		firebase.auth().signOut().then(function() {
+  		console.log('Signed Out');
+  		dispatch({ type: "LOGOUT", loggedIn: false });
+		}, function(error) {
+  		console.error('Sign Out Error', error);
+		});
 	};
 }
 
@@ -226,7 +264,7 @@ export function getCards(timestamp, day, cards, roomid) {
 				.get()
 				.then(function(querySnapshot) {
 					if (querySnapshot.empty) {
-						Alert.alert("No such card");
+						Alert.alert("No such cards for the day");
 					} else {
 						querySnapshot.forEach(function(doc) {
 							const card = doc.data();
@@ -253,38 +291,7 @@ export function getCards(timestamp, day, cards, roomid) {
 					}
 				});
 		} else {
-			if ((day, "==", 1)) {
-				return ref
-					.where("Day", "==", 1)
-					.get()
-					.then(function(querySnapshot) {
-						if (querySnapshot.empty) {
-							Alert.alert("No such card 2");
-						} else {
-							querySnapshot.forEach(function(doc) {
-								const card = doc.data();
-								const text = card.Text;
-								const GIF = card.GIF;
-								newcards.push({
-									id: doc.id,
-									text,
-									GIF
-								});
-							});
-							dispatch({ type: "GET_CARDS", payload: newcards });
-							firebase
-								.firestore()
-								.collection("room")
-								.doc(roomid)
-								.update({
-									cards: newcards
-								});
-						}
-					});
-			} else {
-				console.log("return already in use cards");
-				dispatch({ type: "GET_CARDS", payload: newcards });
-			}
+			dispatch({ type: "GET_CARDS", payload: newcards });
 		}
 	};
 }

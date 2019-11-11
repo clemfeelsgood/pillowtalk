@@ -43,7 +43,7 @@ class Instructions extends React.Component {
           >
             <Text style={styles.button}>Next</Text>
           </TouchableOpacity>
-        //</View>
+        </View>
       );
     } else {
       if(this.props.inroom) {
